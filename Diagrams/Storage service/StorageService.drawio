@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15" version="24.7.7">
+  <diagram name="Page-1" id="6C1c7evxqtmj8IlWrH9B">
+    <mxGraphModel dx="794" dy="547" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="94" y="70" width="640" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-2" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="94" y="310" width="640" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-4" value="StorageService" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="130" y="90" width="260" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-5" value="downloadFile(file: File)&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;uploadFile(file: File)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;deleteFile(file: File)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;getAllFilesByName(name: string)&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" parent="mcO1vrAH3Iz9YVMmeYdY-4" vertex="1">
+          <mxGeometry y="50" width="260" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-10" value="StorageRepository" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="110" y="340" width="300" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-11" value="&lt;div&gt;getFileById(id: long)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;deleteFileById(id: long)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;saveFile(file: File)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;getAllFilesById(userId: long)&lt;/div&gt;" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;" parent="mcO1vrAH3Iz9YVMmeYdY-10" vertex="1">
+          <mxGeometry y="50" width="300" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="mcO1vrAH3Iz9YVMmeYdY-5" target="mcO1vrAH3Iz9YVMmeYdY-10" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-13" value="&lt;b&gt;&lt;font style=&quot;font-size: 20px;&quot;&gt;Service layer&lt;/font&gt;&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="500" y="90" width="250" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="mcO1vrAH3Iz9YVMmeYdY-14" value="&lt;b&gt;&lt;font&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Persistence layer&lt;/span&gt;&lt;/font&gt;&lt;/b&gt;" style="text;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=12;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="470" y="340" width="250" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
