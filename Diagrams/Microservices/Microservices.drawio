@@ -1,0 +1,46 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15" version="24.7.7">
+  <diagram name="Page-1" id="2ylC2Hk9dXpFQf6-k4Tf">
+    <mxGraphModel dx="1961" dy="781" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zo-PrNoerU965GY-V07H-9" value="Client App" style="whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="-80" y="85" width="160" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-10" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="190" y="80" width="540" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-14" value="Chat Service" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="410" y="280" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-15" value="Authentication service" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="410" y="130" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-16" value="User management service&amp;nbsp;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="170" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-17" value="Storage service" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="590" y="250" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="zo-PrNoerU965GY-V07H-18" target="zo-PrNoerU965GY-V07H-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="zo-PrNoerU965GY-V07H-18" target="zo-PrNoerU965GY-V07H-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="zo-PrNoerU965GY-V07H-18" target="zo-PrNoerU965GY-V07H-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="zo-PrNoerU965GY-V07H-18" target="zo-PrNoerU965GY-V07H-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-18" value="API Gateway" style="shape=ext;margin=3;double=1;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="230" y="130" width="100" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="zo-PrNoerU965GY-V07H-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="zo-PrNoerU965GY-V07H-9" target="zo-PrNoerU965GY-V07H-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
