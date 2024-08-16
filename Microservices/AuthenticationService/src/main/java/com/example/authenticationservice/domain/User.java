@@ -2,6 +2,9 @@ package com.example.authenticationservice.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Entity
 @Table(name = "user_credentials")
 public class User {
@@ -14,9 +17,21 @@ public class User {
     @Column(nullable = false, unique = true)
     private String password;
 
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Collection<Role> roles;
+
+    public User(String name, String password, Collection<Role> roles) {
+        this.name = name;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public User(String name, String password) {
         this.name = name;
         this.password = password;
+        this.roles = new ArrayList<>();
     }
 
     public User() {
@@ -46,4 +61,20 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRole(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+    public void removeRole(Role role) {
+        roles.remove(role);
+    }
+
+
 }
