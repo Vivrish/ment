@@ -1,5 +1,6 @@
 package com.example.authenticationservice.domain;
 
+import com.example.authenticationservice.DTO.RoleDto;
 import jakarta.persistence.*;
 
 @Entity
@@ -34,5 +35,9 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public RoleDto toRoleDto() {
+        return new RoleDto(name);
     }
 }

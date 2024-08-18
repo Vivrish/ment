@@ -1,5 +1,6 @@
 package com.example.authenticationservice.domain;
 
+import com.example.authenticationservice.DTO.UserCredentialsDto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -74,6 +75,14 @@ public class User {
     }
     public void removeRole(Role role) {
         roles.remove(role);
+    }
+
+    public UserCredentialsDto toUserCredentialsDto() {
+        UserCredentialsDto userCredentialsDto = new UserCredentialsDto(name, password);
+        for (Role role: roles) {
+            userCredentialsDto.addRole(role.toRoleDto());
+        }
+        return userCredentialsDto;
     }
 
 

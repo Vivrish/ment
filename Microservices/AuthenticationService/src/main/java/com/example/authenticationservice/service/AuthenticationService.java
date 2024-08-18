@@ -4,69 +4,76 @@ import com.example.authenticationservice.DTO.RoleDto;
 import com.example.authenticationservice.DTO.UserCredentialsDto;
 import com.example.authenticationservice.domain.Role;
 import com.example.authenticationservice.domain.User;
+import com.example.authenticationservice.exception.IncorrectCredentialsException;
+import com.example.authenticationservice.exception.RoleDoesNotExistException;
 import com.example.authenticationservice.repository.AuthRepository;
 
 import com.example.authenticationservice.repository.RoleRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-@RestController
-public class AuthenticationService implements UserDetailsService {
+@Service
+public class AuthenticationService {
 
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
 
-    public AuthenticationService(AuthRepository authRepository, RoleRepository roleRepository) {
+    private final BCryptPasswordEncoder encoder;
+
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+
+    public AuthenticationService(AuthRepository authRepository, RoleRepository roleRepository, BCryptPasswordEncoder encoder, AuthenticationManager authenticationManager, JwtService jwtService) {
         this.authRepository = authRepository;
         this.roleRepository = roleRepository;
+        this.encoder = encoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = authRepository.findUserByName(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Username does not exist");
+
+
+    public List<UserCredentialsDto> getAllUsers() {
+        List<UserCredentialsDto> userCredentialsDtos = new ArrayList<>();
+        for (User user: authRepository.findAll()) {
+            userCredentialsDtos.add(user.toUserCredentialsDto());
         }
-
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-
-
-        return new org.springframework.security.core.userdetails.User(user.getName(), user.getPassword(), authorities);
+        return userCredentialsDtos;
     }
 
-    @GetMapping("/api/index")
-    public String index() {
-        return "Welcome to the authentication controller API";
-    }
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return authRepository.findAll();
-    }
-
-    @PostMapping("/register")
-    public void register(@RequestBody UserCredentialsDto user) {
-        User savedUser = new User(user.getNickname(), user.getPassword());
+    public void register(UserCredentialsDto user) throws RoleDoesNotExistException {
+        User savedUser = new User(user.getNickname(), encoder.encode(user.getPassword()));
         for (RoleDto roleDto: user.getRoles()) {
             Role role = roleRepository.findRoleByName(roleDto.getName());
             if (role == null) {
-                return; // TODO
+                throw new RoleDoesNotExistException();
             }
             savedUser.addRole(role);
         }
         authRepository.save(savedUser);
+    }
+
+    public String login(UserCredentialsDto user) throws IncorrectCredentialsException {
+        System.out.println("Login attempt");
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getNickname(), user.getPassword()));
+        if (!authentication.isAuthenticated()) {
+            throw new IncorrectCredentialsException();
+        }
+        String token = jwtService.generateToken(user.getNickname());
+        System.out.printf("Token generated: %s%n", token);
+        return token;
     }
 
 

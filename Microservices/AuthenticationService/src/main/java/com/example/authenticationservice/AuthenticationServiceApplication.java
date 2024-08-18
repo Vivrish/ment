@@ -8,8 +8,15 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +33,18 @@ public class AuthenticationServiceApplication {
 		return args -> {
 			roleService.addRole(new RoleDto("Admin"));
 			authenticationService.register(new UserCredentialsDto("Antonio", "password", List.of(new RoleDto[]{new RoleDto("Admin")})));
-			System.out.println(authenticationService.getAllUsers().get(0).getName());
+			System.out.println(authenticationService.getAllUsers().get(0).getNickname());
 			System.out.println(authenticationService.getAllUsers().get(0).getRoles());
 
 		};
 	}
 
 	@Bean
-	BCryptPasswordEncoder getPasswordEncoder() {
-		return new BCryptPasswordEncoder();
+	BCryptPasswordEncoder getEncoder() {
+		// 12 rounds of hashing
+		return new BCryptPasswordEncoder(12);
 	}
+
+
 
 }

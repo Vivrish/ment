@@ -1,5 +1,6 @@
 package com.example.authenticationservice.DTO;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -25,6 +26,12 @@ public class UserCredentialsDto {
         this.roles = new ArrayList<>();
     }
 
+    public UserCredentialsDto() {
+        this.nickname = "";
+        this.password =  "";
+        this.roles = new ArrayList<>();
+    }
+
     public String getNickname() {
         return nickname;
     }
@@ -46,5 +53,9 @@ public class UserCredentialsDto {
 
     public void setRoles(Collection<RoleDto> roles) {
         this.roles = roles;
+    }
+
+    public void addRole(RoleDto roleDto) {
+        roles.add(roleDto);
     }
 }
