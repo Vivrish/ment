@@ -17,17 +17,16 @@ public class JwtService {
     private final String algorithm = "HmacSHA256";
     private final KeyGenerator keyGenerator;
 
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public JwtService() throws NoSuchAlgorithmException {
         this.keyGenerator = KeyGenerator.getInstance(algorithm);
+        this.secretKey = keyGenerator.generateKey();
     }
 
 
     public String generateToken (String username)  {
         Map<String, Object> claims = new HashMap<>();
-        secretKey = keyGenerator.generateKey();
-
         return Jwts.builder()
                 .addClaims(claims)
                 .setSubject(username)
