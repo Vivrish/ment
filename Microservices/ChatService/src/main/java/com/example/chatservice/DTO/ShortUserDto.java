@@ -3,8 +3,7 @@ package com.example.chatservice.DTO;
 import com.example.chatservice.domain.MessageEntity;
 import com.example.chatservice.domain.RoomEntity;
 import com.example.chatservice.domain.UserEntity;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,4 +24,6 @@ public class ShortUserDto {
             roomNames.add(roomEntity.getName());
         }
     }
+
+
 }

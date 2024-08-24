@@ -11,11 +11,13 @@ import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.repository.MessageRepository;
 import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;

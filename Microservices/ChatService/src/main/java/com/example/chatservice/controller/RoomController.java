@@ -27,6 +27,16 @@ public class RoomController {
         return roomService.createRoom(shortRoomDto);
     }
 
+    @PostMapping("/{roomName}/{username}")
+    public FullRoomDto addMember(@PathVariable String roomName, @PathVariable String username) {
+        return roomService.addMember(roomName, username);
+    }
+
+    @DeleteMapping("/{roomName}/{username}")
+    public FullRoomDto deleteMember(@PathVariable String roomName, @PathVariable String username) {
+        return roomService.deleteMember(roomName, username);
+    }
+
     @PutMapping("/{name}")
     public FullRoomDto editRoom(@RequestBody ShortRoomDto shortRoomDto, @PathVariable String name) {
         return roomService.editRoom(name, shortRoomDto);

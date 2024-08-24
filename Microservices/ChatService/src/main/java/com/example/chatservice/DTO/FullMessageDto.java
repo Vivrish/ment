@@ -1,12 +1,14 @@
 package com.example.chatservice.DTO;
 
 import com.example.chatservice.domain.MessageEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class FullMessageDto {
     private String message;
     private ShortRoomDto room;

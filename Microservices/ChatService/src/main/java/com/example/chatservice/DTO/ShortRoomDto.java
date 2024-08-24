@@ -3,6 +3,7 @@ package com.example.chatservice.DTO;
 import com.example.chatservice.domain.MessageEntity;
 import com.example.chatservice.domain.RoomEntity;
 import com.example.chatservice.domain.UserEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ShortRoomDto {
     private String name;
     private Collection<String> memberNames = new ArrayList<>();

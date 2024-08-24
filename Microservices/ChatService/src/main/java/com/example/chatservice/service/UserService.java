@@ -5,10 +5,12 @@ import com.example.chatservice.DTO.ShortUserDto;
 import com.example.chatservice.domain.UserEntity;
 import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;

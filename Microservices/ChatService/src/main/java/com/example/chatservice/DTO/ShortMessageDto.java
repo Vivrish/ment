@@ -1,6 +1,7 @@
 package com.example.chatservice.DTO;
 
 import com.example.chatservice.domain.MessageEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ShortMessageDto {
     private String message;
     private LocalDateTime timeStamp;
