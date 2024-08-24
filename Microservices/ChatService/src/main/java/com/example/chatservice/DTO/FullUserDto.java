@@ -1,0 +1,28 @@
+package com.example.chatservice.DTO;
+
+import com.example.chatservice.domain.MessageEntity;
+import com.example.chatservice.domain.RoomEntity;
+import com.example.chatservice.domain.UserEntity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
+@Data
+@NoArgsConstructor
+public class FullUserDto {
+    private String nickname;
+    private Collection<ShortMessageDto> messages = new ArrayList<>();
+    private Collection<ShortRoomDto> rooms = new ArrayList<>();
+
+    public FullUserDto(UserEntity userEntity) {
+        this.nickname = userEntity.getNickname();
+        for (MessageEntity messageEntity: userEntity.getMessages()) {
+            this.messages.add(new ShortMessageDto(messageEntity));
+        }
+        for (RoomEntity roomEntity: userEntity.getRooms()) {
+            this.rooms.add(new ShortRoomDto(roomEntity));
+        }
+    }
+}
