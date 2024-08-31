@@ -13,6 +13,7 @@ import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.Collection;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class MessageService {
     private final MessageRepository messageRepository;
     private final RoomRepository roomRepository;
@@ -36,7 +38,7 @@ public class MessageService {
         MessageEntity messageEntity = new MessageEntity(shortMessageDto);
         messageEntity.setRoom(roomEntity);
         messageEntity.setSender(sender);
-        System.out.printf("Message saved: %s%n", shortMessageDto.getMessage());
+        log.debug("Message saved: {}", shortMessageDto.getMessage());
         return new FullMessageDto(messageRepository.save(messageEntity));
     }
 

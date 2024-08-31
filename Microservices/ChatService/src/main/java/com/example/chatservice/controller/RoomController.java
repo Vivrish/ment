@@ -53,17 +53,4 @@ public class RoomController {
     public FullRoomDto editRoom(@RequestBody ShortRoomDto shortRoomDto, @PathVariable String name) {
         return roomService.editRoom(name, shortRoomDto);
     }
-
-
-    @PostMapping("/connect/{roomName}/{username}")
-    public FullRoomDto connectUser(@PathVariable String roomName,
-                                   @PathVariable String username) {
-        return roomService.subscribeMember(roomName, username);
-    }
-
-    @DeleteMapping("/disconnect/{roomName}/{username}")
-    public FullRoomDto disconnectUser(@PathVariable String roomName,
-                                      @PathVariable String username) {
-        return roomService.unSubscribeMember(roomName, username);
-    }
 }

@@ -14,6 +14,7 @@ import com.example.chatservice.repository.TopicRepository;
 import com.example.chatservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -25,6 +26,7 @@ import java.util.Collection;
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class RoomService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
@@ -88,35 +90,10 @@ public class RoomService {
         return new FullRoomDto(roomRepository.save(roomEntity));
     }
 
-    public FullRoomDto subscribeMember(String roomName, String username) {
-        UserEntity userEntity = userRepository.findByNickname(username)
-                .orElseThrow(UserDoesNotExistException::new);
-        RoomEntity roomEntity = roomRepository.findByName(roomName)
-                .orElseThrow(RoomDoesNotExistException::new);
-        if (!roomEntity.getMembers().contains(userEntity)) {
-            throw new UserIsNotAMemberException();
-        }
-        roomEntity.addConnection(userEntity);
-        return new FullRoomDto(roomRepository.save(roomEntity));
-    }
-
-    public FullRoomDto unSubscribeMember(String roomName, String username) {
-        UserEntity userEntity = userRepository.findByNickname(username)
-                .orElseThrow(UserDoesNotExistException::new);
-        RoomEntity roomEntity = roomRepository.findByName(roomName)
-                .orElseThrow(RoomDoesNotExistException::new);
-        if (!roomEntity.getMembers().contains(userEntity)) {
-            throw new UserIsNotAMemberException();
-        }
-        roomEntity.deleteMember(userEntity);
-        return new FullRoomDto(roomRepository.save(roomEntity));
-    }
-
     private void createTopic(String topicName) {
-        System.out.printf("Creating new topic: %s%n",topicName);
+        log.info("Creating new topic: {}", topicName);
         NewTopic topic = TopicBuilder.name(topicName).partitions(1).replicas(1).build();
         kafkaAdmin.createOrModifyTopics(topic);
-        System.out.printf("Topic %s is confirmed", topicName);
     }
 
 

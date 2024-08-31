@@ -9,6 +9,7 @@ import com.example.chatservice.service.Kafka.MessageProducer;
 import com.example.chatservice.service.Kafka.TopicService;
 import lombok.AllArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -21,6 +22,7 @@ import java.util.Collection;
 
 @RestController
 @AllArgsConstructor
+@Slf4j
 public class WebSocketsController {
     private final MessageProducer messageProducer;
     private final TopicService topicService;
@@ -30,11 +32,11 @@ public class WebSocketsController {
     @SendTo("/topic/room/{roomName}")
     public void sendMessage(@Payload ShortMessageDto message, SimpMessageHeaderAccessor accessor) {
         if (message == null) {
-            System.out.println("Message is null");
+            log.error("Message is null");
             return;
         }
         messageProducer.sendMessage(message);
-        System.out.printf("%s -- Message accepted from %s: %s", message.getTimeStamp(), message.getSenderName(), message.getMessage());
+        log.debug("Message accepted from {}: {}", message.getSenderName(), message.getMessage());
     }
 
     @GetMapping("/api/v1/topics")
