@@ -18,6 +18,8 @@ public class RoomEntity {
     Long id;
     @Column(unique = true, nullable = false)
     String name;
+    @OneToOne
+    TopicEntity topic;
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
     Collection<MessageEntity> messages = new ArrayList<>();
     @ManyToMany
@@ -25,6 +27,12 @@ public class RoomEntity {
             joinColumns = @JoinColumn(name = "room_id"),
             inverseJoinColumns = @JoinColumn(name = "user_entity_id"))
     Collection<UserEntity> members = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "connections",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_entity_id"))
+    Collection<UserEntity> connectedMembers = new ArrayList<>();
 
     public RoomEntity(ShortRoomDto shortRoomDto) {
         this.name = shortRoomDto.getName();
@@ -38,6 +46,9 @@ public class RoomEntity {
         members.add(userEntity);
     }
 
+    public void addConnection(UserEntity userEntity) {connectedMembers.add(userEntity);}
+
+    public void removeConnection(UserEntity userEntity) {connectedMembers.remove(userEntity);}
     public void deleteMember(UserEntity userEntity) {
         members.remove(userEntity);
     }

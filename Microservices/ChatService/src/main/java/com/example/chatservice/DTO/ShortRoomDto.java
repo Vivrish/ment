@@ -15,16 +15,25 @@ import java.util.Collection;
 @AllArgsConstructor
 public class ShortRoomDto {
     private String name;
+    private String topicName;
     private Collection<String> memberNames = new ArrayList<>();
     private Collection<String> messages = new ArrayList<>();
+    private Collection<String> connectedMemberNames = new ArrayList<>();
 
     public ShortRoomDto(RoomEntity roomEntity) {
         this.name = roomEntity.getName();
+        if (roomEntity.getTopic() == null) {
+            this.topicName = null;
+        }
+        else {this.topicName = roomEntity.getTopic().getTopicName();}
         for (UserEntity userEntity: roomEntity.getMembers()) {
             this.memberNames.add(userEntity.getNickname());
         }
         for (MessageEntity messageEntity: roomEntity.getMessages()) {
             this.messages.add(messageEntity.getMessage());
+        }
+        for (UserEntity userEntity: roomEntity.getConnectedMembers()) {
+            this.connectedMemberNames.add(userEntity.getNickname());
         }
     }
 }

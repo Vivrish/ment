@@ -20,24 +20,23 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(@NonNull StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
     }
 
-    @Override
-    public boolean configureMessageConverters(@NonNull List<MessageConverter> messageConverters) {
-        DefaultContentTypeResolver contentTypeResolver = new DefaultContentTypeResolver();
-        contentTypeResolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
-        converter.setContentTypeResolver(contentTypeResolver);
-        messageConverters.add(converter);
-        return false;
-    }
+//    @Override
+//    public boolean configureMessageConverters(@NonNull List<MessageConverter> messageConverters) {
+//        DefaultContentTypeResolver contentTypeResolver = new DefaultContentTypeResolver();
+//        contentTypeResolver.setDefaultMimeType(MimeTypeUtils.APPLICATION_JSON);
+//        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+//        converter.setObjectMapper(new ObjectMapper());
+//        converter.setContentTypeResolver(contentTypeResolver);
+//        messageConverters.add(converter);
+//        return false;
+//    }
 
     @Override
     public void configureMessageBroker(@NonNull MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/user");
+        registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/app");
-        registry.setUserDestinationPrefix("/user");
     }
 }

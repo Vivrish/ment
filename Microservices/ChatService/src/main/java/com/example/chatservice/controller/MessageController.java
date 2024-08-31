@@ -6,12 +6,18 @@ import com.example.chatservice.service.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("api/v1/messages")
 @AllArgsConstructor
 public class MessageController {
     private final MessageService messageService;
 
+    @GetMapping("" )
+    public Collection<FullMessageDto> getAll() {
+        return messageService.getAll();
+    }
 
     @GetMapping("/{id}")
     public FullMessageDto getMessage(@PathVariable Long id) {

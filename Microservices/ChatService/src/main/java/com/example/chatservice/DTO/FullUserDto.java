@@ -17,6 +17,7 @@ public class FullUserDto {
     private String nickname;
     private Collection<ShortMessageDto> messages = new ArrayList<>();
     private Collection<ShortRoomDto> rooms = new ArrayList<>();
+    private Collection<ShortRoomDto> connections = new ArrayList<>();
 
     public FullUserDto(UserEntity userEntity) {
         this.nickname = userEntity.getNickname();
@@ -25,6 +26,9 @@ public class FullUserDto {
         }
         for (RoomEntity roomEntity: userEntity.getRooms()) {
             this.rooms.add(new ShortRoomDto(roomEntity));
+        }
+        for (RoomEntity roomEntity: userEntity.getConnections()) {
+            this.connections.add(new ShortRoomDto(roomEntity));
         }
     }
 }

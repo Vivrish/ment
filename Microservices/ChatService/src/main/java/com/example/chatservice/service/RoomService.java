@@ -3,16 +3,24 @@ package com.example.chatservice.service;
 import com.example.chatservice.DTO.FullRoomDto;
 import com.example.chatservice.DTO.ShortRoomDto;
 import com.example.chatservice.domain.RoomEntity;
+import com.example.chatservice.domain.TopicEntity;
 import com.example.chatservice.domain.UserEntity;
 import com.example.chatservice.exception.RoomDoesNotExistException;
 import com.example.chatservice.exception.UserAlreadyAMemberException;
 import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.exception.UserIsNotAMemberException;
 import com.example.chatservice.repository.RoomRepository;
+import com.example.chatservice.repository.TopicRepository;
 import com.example.chatservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.kafka.clients.admin.NewTopic;
+import org.springframework.kafka.config.TopicBuilder;
+import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Service
 @Transactional
@@ -20,6 +28,8 @@ import org.springframework.stereotype.Service;
 public class RoomService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final TopicRepository topicRepository;
+    private final KafkaAdmin kafkaAdmin;
 
     public FullRoomDto getRoomByName(String name) {
         RoomEntity roomEntity = getRoomOrThrow(name);
@@ -28,6 +38,11 @@ public class RoomService {
 
     public FullRoomDto createRoom(ShortRoomDto shortRoomDto) {
         RoomEntity roomEntity = new RoomEntity(shortRoomDto);
+        roomRepository.save(roomEntity);
+        TopicEntity topicEntity = new TopicEntity(roomEntity);
+        topicRepository.save(topicEntity);
+        roomEntity.setTopic(topicEntity);
+        createTopic(topicEntity.getTopicName());
         return new FullRoomDto(roomRepository.save(roomEntity));
     }
 
@@ -71,5 +86,45 @@ public class RoomService {
         }
         roomEntity.deleteMember(userEntity);
         return new FullRoomDto(roomRepository.save(roomEntity));
+    }
+
+    public FullRoomDto subscribeMember(String roomName, String username) {
+        UserEntity userEntity = userRepository.findByNickname(username)
+                .orElseThrow(UserDoesNotExistException::new);
+        RoomEntity roomEntity = roomRepository.findByName(roomName)
+                .orElseThrow(RoomDoesNotExistException::new);
+        if (!roomEntity.getMembers().contains(userEntity)) {
+            throw new UserIsNotAMemberException();
+        }
+        roomEntity.addConnection(userEntity);
+        return new FullRoomDto(roomRepository.save(roomEntity));
+    }
+
+    public FullRoomDto unSubscribeMember(String roomName, String username) {
+        UserEntity userEntity = userRepository.findByNickname(username)
+                .orElseThrow(UserDoesNotExistException::new);
+        RoomEntity roomEntity = roomRepository.findByName(roomName)
+                .orElseThrow(RoomDoesNotExistException::new);
+        if (!roomEntity.getMembers().contains(userEntity)) {
+            throw new UserIsNotAMemberException();
+        }
+        roomEntity.deleteMember(userEntity);
+        return new FullRoomDto(roomRepository.save(roomEntity));
+    }
+
+    private void createTopic(String topicName) {
+        System.out.printf("Creating new topic: %s%n",topicName);
+        NewTopic topic = TopicBuilder.name(topicName).partitions(1).replicas(1).build();
+        kafkaAdmin.createOrModifyTopics(topic);
+        System.out.printf("Topic %s is confirmed", topicName);
+    }
+
+
+    public Collection<FullRoomDto> getAll() {
+        Collection<FullRoomDto> rooms = new ArrayList<>();
+        for (RoomEntity roomEntity: roomRepository.findAll()) {
+            rooms.add(new FullRoomDto(roomEntity));
+        }
+        return rooms;
     }
 }

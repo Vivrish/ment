@@ -14,6 +14,7 @@ public class ShortUserDto {
     private String username;
     private Collection<String> messages = new ArrayList<>();
     private Collection<String> roomNames = new ArrayList<>();
+    private Collection<String> connectedRoomNames = new ArrayList<>();
 
     public ShortUserDto(UserEntity userEntity) {
         this.username = userEntity.getNickname();
@@ -22,6 +23,9 @@ public class ShortUserDto {
         }
         for (RoomEntity roomEntity: userEntity.getRooms()) {
             roomNames.add(roomEntity.getName());
+        }
+        for (RoomEntity roomEntity: userEntity.getConnections()) {
+            connectedRoomNames.add(roomEntity.getName());
         }
     }
 

@@ -15,6 +15,9 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 
 @Service
 @Transactional
@@ -33,6 +36,7 @@ public class MessageService {
         MessageEntity messageEntity = new MessageEntity(shortMessageDto);
         messageEntity.setRoom(roomEntity);
         messageEntity.setSender(sender);
+        System.out.printf("Message saved: %s%n", shortMessageDto.getMessage());
         return new FullMessageDto(messageRepository.save(messageEntity));
     }
 
@@ -56,5 +60,13 @@ public class MessageService {
 
     private MessageEntity getMessageOrThrow(Long id) {
         return messageRepository.findById(id).orElseThrow(MessageDoesNotExistException::new);
+    }
+
+    public Collection<FullMessageDto> getAll() {
+        Collection<FullMessageDto> messages = new ArrayList<>();
+        for (MessageEntity messageEntity: messageRepository.findAll()) {
+            messages.add(new FullMessageDto(messageEntity));
+        }
+        return messages;
     }
 }

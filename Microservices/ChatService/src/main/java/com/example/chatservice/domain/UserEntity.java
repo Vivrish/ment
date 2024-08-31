@@ -15,13 +15,15 @@ import java.util.Collection;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @Column(unique = true, nullable = false)
-    String nickname;
+    private String nickname;
     @ManyToMany(mappedBy = "members")
-    Collection<RoomEntity> rooms = new ArrayList<>();
+    private Collection<RoomEntity> rooms = new ArrayList<>();
+    @ManyToMany(mappedBy = "connectedMembers")
+    private Collection<RoomEntity> connections = new ArrayList<>();
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
-    Collection<MessageEntity> messages = new ArrayList<>();
+    private Collection<MessageEntity> messages = new ArrayList<>();
 
     public UserEntity(ShortUserDto shortUserDto) {
         this.nickname = shortUserDto.getUsername();
