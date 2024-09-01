@@ -3,7 +3,6 @@ package com.example.chatservice.controller;
 
 import com.example.chatservice.DTO.FullTopicDto;
 import com.example.chatservice.DTO.ShortMessageDto;
-import com.example.chatservice.service.Kafka.MessageConsumer;
 import com.example.chatservice.service.Kafka.MessageProducer;
 
 import com.example.chatservice.service.Kafka.TopicService;
@@ -30,7 +29,7 @@ public class WebSocketsController {
 
     @MessageMapping("/sendMessage")
     @SendTo("/topic/room/{roomName}")
-    public void sendMessage(@Payload ShortMessageDto message, SimpMessageHeaderAccessor accessor) {
+    public void sendMessage(@Payload ShortMessageDto message) {
         if (message == null) {
             log.error("Message is null");
             return;

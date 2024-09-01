@@ -38,6 +38,14 @@ public class RoomService {
         return new FullRoomDto(roomEntity);
     }
 
+    public Collection<FullRoomDto> getAll() {
+        Collection<FullRoomDto> rooms = new ArrayList<>();
+        for (RoomEntity roomEntity: roomRepository.findAll()) {
+            rooms.add(new FullRoomDto(roomEntity));
+        }
+        return rooms;
+    }
+
     public FullRoomDto createRoom(ShortRoomDto shortRoomDto) {
         RoomEntity roomEntity = new RoomEntity(shortRoomDto);
         roomRepository.save(roomEntity);
@@ -62,9 +70,7 @@ public class RoomService {
     }
 
 
-    private RoomEntity getRoomOrThrow(String name) throws RoomDoesNotExistException  {
-        return roomRepository.findByName(name).orElseThrow(RoomDoesNotExistException::new);
-    }
+
 
     public FullRoomDto addMember(String roomName, String username) {
         UserEntity userEntity = userRepository.findByNickname(username)
@@ -96,12 +102,9 @@ public class RoomService {
         kafkaAdmin.createOrModifyTopics(topic);
     }
 
-
-    public Collection<FullRoomDto> getAll() {
-        Collection<FullRoomDto> rooms = new ArrayList<>();
-        for (RoomEntity roomEntity: roomRepository.findAll()) {
-            rooms.add(new FullRoomDto(roomEntity));
-        }
-        return rooms;
+    private RoomEntity getRoomOrThrow(String name) throws RoomDoesNotExistException  {
+        return roomRepository.findByName(name).orElseThrow(RoomDoesNotExistException::new);
     }
+
+
 }
