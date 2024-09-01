@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: 'ChatsDatabase'
+    environment:
+      - 'POSTGRES_DB=chats_database'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '5435:5432'
