@@ -5,12 +5,15 @@ import com.example.authenticationservice.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
@@ -36,7 +39,10 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "403", description = "Name already exists or role does not exist"),
     })
     @PostMapping("/register")
-    public void register(@RequestBody UserCredentialsDto user) {
+    public void register(@RequestBody @NonNull UserCredentialsDto user) {
+        log.debug("Request accepted: register a user with attributes: {} {}",
+                 user.getNickname(),
+                 user.getPassword());
         authenticationService.register(user);
     }
 
