@@ -24,6 +24,13 @@ public class User {
         this.settings = settings;
     }
 
+    public User(FullUserDto userDto) {
+        this.nickname = userDto.getNickname();
+        this.firstName = userDto.getFirstName();
+        this.lastName = userDto.getLastName();
+        this.description = userDto.getDescription();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

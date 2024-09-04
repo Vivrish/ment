@@ -18,4 +18,12 @@ public class FullUserCredentialsDto {
         this.password = fullUserDto.getPassword();
         this.roles = fullUserDto.getRoles();
     }
+
+    @Override
+    public String toString() {
+        return "FullUserCredentialsDto{" +
+                "nickname='" + nickname + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

@@ -57,8 +57,8 @@ public class AuthenticationController {
         return authenticationService.login(user);
     }
 
-    @GetMapping("/auth/{token}")
-    public boolean validateToken(@RequestBody UserCredentialsDto credentials, @PathVariable String token) {
-        return false;
+    @GetMapping("/auth}")
+    public boolean validateHeader(String token) {
+        return jwtService.validateHeader(token);
     }
 }
