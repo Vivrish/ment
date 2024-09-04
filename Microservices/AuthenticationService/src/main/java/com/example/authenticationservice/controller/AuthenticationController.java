@@ -2,9 +2,11 @@ package com.example.authenticationservice.controller;
 
 import com.example.authenticationservice.DTO.UserCredentialsDto;
 import com.example.authenticationservice.service.AuthenticationService;
+import com.example.authenticationservice.service.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
+@AllArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
 
 
     @Operation(summary = "Get all user credentials and their roles")
@@ -54,5 +55,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String login(@RequestBody UserCredentialsDto user) {
         return authenticationService.login(user);
+    }
+
+    @GetMapping("/auth/{token}")
+    public boolean validateToken(@RequestBody UserCredentialsDto credentials, @PathVariable String token) {
+        return false;
     }
 }
