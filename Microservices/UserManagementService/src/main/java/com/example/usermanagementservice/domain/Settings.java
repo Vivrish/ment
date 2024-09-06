@@ -18,13 +18,18 @@ public class Settings {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private boolean allowMessagesFromStrangers;
+    private boolean allowMessagesFromStrangers = true;
     @Column
-    private boolean allowInvites;
+    private boolean allowInvites = true;
 
     public Settings(boolean allowMessagesFromStrangers, boolean allowInvites) {
         this.allowMessagesFromStrangers = allowMessagesFromStrangers;
         this.allowInvites = allowInvites;
+    }
+
+    public Settings(SettingsDto settingsDto) {
+        this.allowInvites = settingsDto.isAllowInvites();
+        this.allowMessagesFromStrangers = settingsDto.isAllowMessagesFromStrangers();
     }
 
     public void updateAttributes(SettingsDto settingsDto) {

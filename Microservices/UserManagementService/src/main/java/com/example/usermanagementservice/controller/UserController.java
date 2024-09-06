@@ -17,7 +17,6 @@ import java.util.Collection;
 public class UserController {
     private final UserService userService;
     private final SettingsService settingsService;
-    private final ContactService contactService;
 
     @GetMapping("")
     public Collection<FullUserDto> getUsers() {

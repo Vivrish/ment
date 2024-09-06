@@ -8,6 +8,8 @@ import com.example.usermanagementservice.repository.SettingsRepository;
 import com.example.usermanagementservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.Collection;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final SettingsRepository settingsRepository;
@@ -44,12 +47,13 @@ public class UserService {
         return new FullUserDto(userRepository.save(user));
     }
 
-
     public FullUserDto createUser(FullUserDto fullUserDto) {
-        User user = new User();
-        user.updateAttributes(fullUserDto);
+        log.debug("Registering user {}", fullUserDto);
+        User user = new User(fullUserDto);
         Settings settings = new Settings();
-        settings.updateAttributes(fullUserDto.getSettings());
+        if (fullUserDto.getSettings() != null) {
+            settings.updateAttributes(fullUserDto.getSettings());
+        }
         settingsRepository.save(settings);
         user.setSettings(settings);
         return new FullUserDto(userRepository.save(user));
