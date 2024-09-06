@@ -60,10 +60,10 @@ jobs:
       - name: Push Docker images to registry
         env:
           DOCKER_REGISTRY: ghcr.io
-          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          DOCKER_USERNAME: ${{ github.actor }}
+          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
           docker push $DOCKER_REGISTRY/nikolai/apigateway:latest
           docker push $DOCKER_REGISTRY/nikolai/authservice:latest
           docker push $DOCKER_REGISTRY/nikolai/usermanagementservice:latest
