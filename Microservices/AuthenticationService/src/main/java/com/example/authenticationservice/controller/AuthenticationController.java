@@ -2,21 +2,25 @@ package com.example.authenticationservice.controller;
 
 import com.example.authenticationservice.DTO.UserCredentialsDto;
 import com.example.authenticationservice.service.AuthenticationService;
+import com.example.authenticationservice.service.JwtService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
+@AllArgsConstructor
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
+    private final JwtService jwtService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
 
 
     @Operation(summary = "Get all user credentials and their roles")
@@ -29,6 +33,11 @@ public class AuthenticationController {
         return authenticationService.getAllUsers();
     }
 
+    @GetMapping("/users/{username}")
+    UserCredentialsDto getUserByName(@PathVariable String username) {
+        return authenticationService.getUserByName(username);
+    }
+
 
     @Operation(summary = "Register a new user")
     @ApiResponses(value = {
@@ -36,7 +45,10 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "403", description = "Name already exists or role does not exist"),
     })
     @PostMapping("/register")
-    public void register(@RequestBody UserCredentialsDto user) {
+    public void register(@RequestBody @NonNull UserCredentialsDto user) {
+        log.debug("Request accepted: register a user with attributes: {} {}",
+                 user.getNickname(),
+                 user.getPassword());
         authenticationService.register(user);
     }
 
@@ -48,5 +60,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public String login(@RequestBody UserCredentialsDto user) {
         return authenticationService.login(user);
+    }
+
+    @GetMapping("/auth")
+    public boolean validateHeader(String token) {
+        return jwtService.validateHeader(token);
     }
 }

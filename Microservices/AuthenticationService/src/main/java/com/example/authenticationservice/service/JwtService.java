@@ -2,12 +2,12 @@ package com.example.authenticationservice.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
@@ -19,7 +19,10 @@ public class JwtService {
 
     private final SecretKey secretKey;
 
-    public JwtService() throws NoSuchAlgorithmException {
+    private final UserDetailsService userDetailsService;
+
+    public JwtService(UserDetailsService userDetailsService) throws NoSuchAlgorithmException {
+        this.userDetailsService = userDetailsService;
         this.keyGenerator = KeyGenerator.getInstance(algorithm);
         this.secretKey = keyGenerator.generateKey();
     }
@@ -40,6 +43,19 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public boolean validateHeader(String header) {
+        if (header == null || !header.startsWith("Bearer ")) {
+            return false;
+        }
+        String jwtToken = header.substring(7);
+        String username = extractUsername(jwtToken);
+        if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+            return false;
+        }
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return validateToken(jwtToken, userDetails);
     }
 
     public boolean validateToken(String jwtToken, UserDetails userDetails) {
@@ -69,5 +85,7 @@ public class JwtService {
     }
 
 
-
+    public UserDetails getUserDetails(String authHeader) {
+        return userDetailsService.loadUserByUsername(extractUsername(authHeader.substring(7)));
+    }
 }

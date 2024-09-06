@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class RoleDoesNotExistException extends ResponseStatusException {
         public RoleDoesNotExistException() {
-            super(HttpStatus.BAD_REQUEST, "Incorrect role");
+            super(HttpStatus.NOT_FOUND, "Incorrect role");
         }
 
 }

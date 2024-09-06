@@ -2,8 +2,9 @@ package com.example.authenticationservice.security;
 
 
 
-import com.example.authenticationservice.filter.JwtFilter;
+
 import com.example.authenticationservice.service.UserDetailsService;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,19 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig  {
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder encoder;
-    private final JwtFilter jwtFilter;
-
-    public SecurityConfig(UserDetailsService userDetailsService, BCryptPasswordEncoder encoder, JwtFilter jwtFilter) {
-        this.userDetailsService = userDetailsService;
-        this.encoder = encoder;
-        this.jwtFilter = jwtFilter;
-    }
-
-
-
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -49,12 +41,9 @@ public class SecurityConfig  {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/v1/login", "/api/v1/register")
-                        .permitAll()
                         .anyRequest()
-                        .authenticated())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        .permitAll())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
     }
 

@@ -6,10 +6,11 @@ import com.example.authenticationservice.domain.Role;
 import com.example.authenticationservice.domain.User;
 import com.example.authenticationservice.exception.IncorrectCredentialsException;
 import com.example.authenticationservice.exception.NameAlreadyExistsException;
+import com.example.authenticationservice.exception.NameDoesNotExistException;
 import com.example.authenticationservice.exception.RoleDoesNotExistException;
 import com.example.authenticationservice.repository.AuthRepository;
-
 import com.example.authenticationservice.repository.RoleRepository;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,24 +24,13 @@ import java.util.List;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class AuthenticationService {
-
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
-
     private final BCryptPasswordEncoder encoder;
-
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    public AuthenticationService(AuthRepository authRepository, RoleRepository roleRepository, BCryptPasswordEncoder encoder, AuthenticationManager authenticationManager, JwtService jwtService) {
-        this.authRepository = authRepository;
-        this.roleRepository = roleRepository;
-        this.encoder = encoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
-
 
 
     public List<UserCredentialsDto> getAllUsers() {
@@ -55,7 +45,7 @@ public class AuthenticationService {
     public void register(UserCredentialsDto user) throws RoleDoesNotExistException {
         log.info("Registering user {}", user.getNickname());
         User savedUser = new User(user.getNickname(), encoder.encode(user.getPassword()));
-        if (authRepository.findUserByName(user.getNickname()) != null) {
+        if (authRepository.existsByName(user.getNickname())) {
             throw new NameAlreadyExistsException();
         }
         for (RoleDto roleDto: user.getRoles()) {
@@ -83,4 +73,9 @@ public class AuthenticationService {
     }
 
 
+    public UserCredentialsDto getUserByName(String username) {
+        log.info("Getting user credentials of {}", username);
+        return new UserCredentialsDto(authRepository.findUserByName(username)
+                .orElseThrow(NameDoesNotExistException::new));
+    }
 }
