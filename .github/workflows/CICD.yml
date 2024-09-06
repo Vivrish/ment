@@ -34,15 +34,15 @@ jobs:
       - name: Build with Gradle
         run: |
           cd Microservices/ApiGateway
-          ./gradlew build --no-daemon -x test
+          ./gradlew build --no-daemon
           cd ../AuthenticationService
-          ./gradlew build --no-daemon -x test
+          ./gradlew build --no-daemon
           cd ../UserManagementService
-          ./gradlew build --no-daemon -x test
+          ./gradlew build --no-daemon
           cd ../ChatService
-          ./gradlew build --no-daemon -x test
+          ./gradlew build --no-daemon
           cd ../EurekaServer
-          ./gradlew build --no-daemon -x test
+          ./gradlew build --no-daemon
 
       - name: login to GitHub Container Registry
         uses: docker/login-action@v1
