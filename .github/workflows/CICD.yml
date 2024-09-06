@@ -44,6 +44,13 @@ jobs:
           cd ../EurekaServer
           ./gradlew build --no-daemon -x test
 
+      - name: login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker images
         run: |
           cd Microservices/ApiGateway
@@ -60,19 +67,15 @@ jobs:
       - name: Push Docker images to registry
         env:
           DOCKER_REGISTRY: ghcr.io
-          DOCKER_USERNAME: ${{ github.actor }}
-          DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+          docker tag apigateway $DOCKER_REGISTRY/vivrish/apigateway:latest
+          docker tag authservice $DOCKER_REGISTRY/vivrish/authservice:latest
+          docker tag usermanagementservice $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
+          docker tag chatservice $DOCKER_REGISTRY/vivrish/chatservice:latest
+          docker tag eurika $DOCKER_REGISTRY/vivrish/eurika:latest
 
-          docker tag apigateway $DOCKER_REGISTRY/$DOCKER_USERNAME/apigateway:latest
-          docker tag authservice $DOCKER_REGISTRY/$DOCKER_USERNAME/authservice:latest
-          docker tag usermanagementservice $DOCKER_REGISTRY/$DOCKER_USERNAME/usermanagementservice:latest
-          docker tag chatservice $DOCKER_REGISTRY/$DOCKER_USERNAME/chatservice:latest
-          docker tag eurika $DOCKER_REGISTRY/$DOCKER_USERNAME/eurika:latest
-
-          docker push $DOCKER_REGISTRY/$DOCKER_USERNAME/apigateway:latest
-          docker push $DOCKER_REGISTRY/$DOCKER_USERNAME/authservice:latest
-          docker push $DOCKER_REGISTRY/$DOCKER_USERNAME/usermanagementservice:latest
-          docker push $DOCKER_REGISTRY/$DOCKER_USERNAME/chatservice:latest 
-          docker push $DOCKER_REGISTRY/$DOCKER_USERNAME/eurika:latest
+          docker push $DOCKER_REGISTRY/vivrish/apigateway:latest
+          docker push $DOCKER_REGISTRY/vivrish/authservice:latest
+          docker push $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
+          docker push $DOCKER_REGISTRY/vivrish/chatservice:latest 
+          docker push $DOCKER_REGISTRY/vivrish/eurika:latest
