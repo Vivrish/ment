@@ -1,0 +1,71 @@
+name: CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - feature/interservice-communication
+  pull_request:
+    branches:
+      - feature/interservice-communication
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Build with Gradle
+        run: |
+          cd Microservices/ApiGateway
+          ./gradlew build --no-daemon -x test
+          cd ../AuthenticationService
+          ./gradlew build --no-daemon -x test
+          cd ../UserManagementService
+          ./gradlew build --no-daemon -x test
+          cd ../ChatService
+          ./gradlew build --no-daemon -x test
+          cd ../EurekaServer
+          ./gradlew build --no-daemon -x test          
+
+      - name: Build Docker images
+        run: |
+          cd Microservices/ApiGateway
+          docker build -t apigateway:latest .
+          cd ../AuthenticationService
+          docker build -t authservice:latest .
+          cd ../UserManagementService
+          docker build -t usermanagementservice:latest .
+          cd ../ChatService
+          docker build -t chatservice:latest .
+          cd ../EurekaServer
+          docker build -t eurika:latest .     
+
+      - name: Push Docker images to registry
+        env:
+          DOCKER_REGISTRY: ghcr.io
+          DOCKER_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        run: |
+          echo "${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}" | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+          docker push $DOCKER_REGISTRY/nikolai/apigateway:latest
+          docker push $DOCKER_REGISTRY/nikolai/authservice:latest
+          docker push $DOCKER_REGISTRY/nikolai/usermanagementservice:latest
+          docker push $DOCKER_REGISTRY/nikolai/chatservice:latest 
+          docker push $DOCKER_REGISTRY/nikolai/eurika:latest
+          
+     
