@@ -6,16 +6,18 @@ import com.example.apigateway.DTO.FullUserCredentialsDto;
 import com.example.apigateway.DTO.FullUserDto;
 import com.example.apigateway.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/users")
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @GetMapping("/{username}")
+    public FullUserDto getUserByName(@PathVariable String username, @RequestHeader("Authorization") String authHeader ) {
+        return userService.getUserByName(username, authHeader);
+    }
 
     @PostMapping("")
     public void register(@RequestBody FullUserDto userDto) {

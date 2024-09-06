@@ -33,6 +33,11 @@ public class AuthenticationController {
         return authenticationService.getAllUsers();
     }
 
+    @GetMapping("/users/{username}")
+    UserCredentialsDto getUserByName(@PathVariable String username) {
+        return authenticationService.getUserByName(username);
+    }
+
 
     @Operation(summary = "Register a new user")
     @ApiResponses(value = {
@@ -57,7 +62,7 @@ public class AuthenticationController {
         return authenticationService.login(user);
     }
 
-    @GetMapping("/auth}")
+    @GetMapping("/auth")
     public boolean validateHeader(String token) {
         return jwtService.validateHeader(token);
     }

@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
-public class ShortUserDto {
+public class ShortUserDetailsDto {
     private String username;
     private String password;
     private String firstName;

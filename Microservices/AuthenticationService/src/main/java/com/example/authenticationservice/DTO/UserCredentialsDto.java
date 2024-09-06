@@ -1,6 +1,8 @@
 package com.example.authenticationservice.DTO;
 
 
+import com.example.authenticationservice.domain.Role;
+import com.example.authenticationservice.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +29,15 @@ public class UserCredentialsDto {
         this.nickname = nickname;
         this.password = password;
         this.roles = new ArrayList<>();
+    }
+
+    public UserCredentialsDto(User user) {
+        this.nickname = user.getName();
+        this.password = user.getPassword();
+        this.roles = new ArrayList<>();
+        for (Role role: user.getRoles()) {
+            roles.add(new RoleDto(role));
+        }
     }
 
 
