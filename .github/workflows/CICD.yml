@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - feature/interservice-communication
+  workflow_dispatch:
 
 jobs:
   build:
