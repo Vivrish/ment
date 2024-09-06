@@ -47,15 +47,15 @@ jobs:
       - name: Build Docker images
         run: |
           cd Microservices/ApiGateway
-          docker build -t apigateway:latest .
+          docker build -t apigateway .
           cd ../AuthenticationService
-          docker build -t authservice:latest .
+          docker build -t authservice .
           cd ../UserManagementService
-          docker build -t usermanagementservice:latest .
+          docker build -t usermanagementservice .
           cd ../ChatService
-          docker build -t chatservice:latest .
+          docker build -t chatservice .
           cd ../EurekaServer
-          docker build -t eurika:latest .
+          docker build -t eurika .
 
       - name: Push Docker images to registry
         env:
@@ -64,6 +64,13 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+
+          docker tag apigateway $DOCKER_REGISTRY/nikolai/apigateway:latest
+          docker tag authservice $DOCKER_REGISTRY/nikolai/authservice:latest
+          docker tag usermanagementservice $DOCKER_REGISTRY/nikolai/usermanagementservice:latest
+          docker tag chatservice $DOCKER_REGISTRY/nikolai/chatservice:latest
+          docker tag eurika $DOCKER_REGISTRY/nikolai/eurika:latest
+
           docker push $DOCKER_REGISTRY/nikolai/apigateway:latest
           docker push $DOCKER_REGISTRY/nikolai/authservice:latest
           docker push $DOCKER_REGISTRY/nikolai/usermanagementservice:latest
