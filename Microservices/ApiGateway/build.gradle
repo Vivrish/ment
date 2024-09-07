@@ -17,6 +17,8 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	integrationTestImplementation.extendsFrom testImplementation
+	integrationTestRuntimeOnly.extendsFrom testRuntimeOnly
 }
 
 repositories {
@@ -26,6 +28,20 @@ repositories {
 ext {
 	set('springCloudVersion', "2023.0.3")
 }
+
+sourceSets {
+	integrationTest {
+		java {
+			srcDir 'src/integrationTest/java'
+		}
+		resources {
+			srcDir 'src/integrationTest/resources'
+		}
+		compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+}
+
 
 dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
@@ -54,5 +70,18 @@ dependencyManagement {
 }
 
 tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+tasks.named('integrationTest') {
 	useJUnitPlatform()
 }

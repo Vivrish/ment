@@ -5,12 +5,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class ApiGatewayApplicationTests {
+class ApiGatewayIntegrationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
+
 	@Test
 	void test2(){
 		System.out.println("Test executed");
