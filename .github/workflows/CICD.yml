@@ -161,6 +161,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Pull Docker images from registry
+        env:
+          DOCKER_REGISTRY: ghcr.io
         run: |
           docker pull $DOCKER_REGISTRY/vivrish/apigateway:latest
           docker pull $DOCKER_REGISTRY/vivrish/authservice:latest
