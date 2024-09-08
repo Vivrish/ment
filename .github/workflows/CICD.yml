@@ -173,6 +173,6 @@ jobs:
       - name: Run E2E tests
         run: |
           cd Microservices
-          docker-compose up
+          docker-compose -f docker-compose.ci.yml up
           sleep 60
-          docker-compose down
+          docker-compose -f docker-compose.ci.yml down
