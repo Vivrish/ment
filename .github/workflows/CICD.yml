@@ -153,6 +153,21 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
 
+      - name: login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Docker images from registry
+        run: |
+          docker pull $DOCKER_REGISTRY/vivrish/apigateway:latest
+          docker pull $DOCKER_REGISTRY/vivrish/authservice:latest
+          docker pull $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
+          docker pull $DOCKER_REGISTRY/vivrish/chatservice:latest 
+          docker pull $DOCKER_REGISTRY/vivrish/eurika:latest
+
       - name: Run E2E tests
         run: |
           cd Microservices
