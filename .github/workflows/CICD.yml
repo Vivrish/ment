@@ -3,10 +3,14 @@ name: CI/CD pipeline
 on:
   push:
     branches:
-      - feature/interservice-communication
+      - "feature/*"
+      - "develop"
+      - "main"
   pull_request:
     branches:
-      - feature/interservice-communication
+      - "feature/*"
+      - "develop"
+      - "main"
   workflow_dispatch:
 
 jobs:
@@ -175,4 +179,7 @@ jobs:
           cd Microservices
           docker-compose -f docker-compose.ci.yml up -d
           sleep 60
+          cd ApiGateway
+          ./gradlew e2eTest --no-daemon
+          cd ..
           docker-compose -f docker-compose.ci.yml down
