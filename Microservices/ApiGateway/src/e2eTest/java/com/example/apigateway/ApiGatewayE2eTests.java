@@ -1,19 +1,18 @@
 package com.example.apigateway;
 
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles("test")
-class ApiGatewayApplicationTests {
+@ActiveProfiles("main")
+public class ApiGatewayE2eTests {
 
-	@Test
-	void contextLoads() {
-	}
-	@Test
-	void test2(){
-		System.out.println("Test executed");
-	}
+    @Test
+    public void contextLoads() {
+
+    }
+
 
 }

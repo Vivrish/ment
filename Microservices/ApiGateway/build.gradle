@@ -27,6 +27,31 @@ ext {
 	set('springCloudVersion', "2023.0.3")
 }
 
+sourceSets {
+	integrationTest {
+		java {
+			srcDir 'src/integrationTest/java'
+		}
+		resources {
+			srcDir 'src/integrationTest/resources'
+		}
+		compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+
+	e2eTest {
+		java {
+			srcDir 'src/e2e/java'
+		}
+		resources {
+			srcDir 'src/e2e/resources'
+		}
+		compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+}
+
+
 dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.apache.kafka:kafka-clients:3.4.0'
@@ -54,5 +79,29 @@ dependencyManagement {
 }
 
 tasks.named('test') {
+	useJUnitPlatform()
+}
+
+
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+tasks.register('e2eTest', Test) {
+	description = 'Runs the E2E tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.e2eTest.output.classesDirs
+	classpath = sourceSets.e2eTest.runtimeClasspath
+}
+
+tasks.named('integrationTest') {
+	useJUnitPlatform()
+}
+
+tasks.named('e2eTest') {
 	useJUnitPlatform()
 }
