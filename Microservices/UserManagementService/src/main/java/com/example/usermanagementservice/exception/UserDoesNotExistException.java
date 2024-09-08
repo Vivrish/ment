@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class UserDoesNotExistException extends ResponseStatusException {
     public UserDoesNotExistException() {
-        super(HttpStatus.BAD_REQUEST, "User with this nickname does not exist");
+        super(HttpStatus.NOT_FOUND, "User with this nickname does not exist");
     }
 }

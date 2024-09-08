@@ -70,6 +70,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	e2eTestCompileOnly 'org.projectlombok:lombok'
+	e2eTestAnnotationProcessor 'org.projectlombok:lombok'
+	e2eTestImplementation 'io.rest-assured:rest-assured:5.3.0'
+	e2eTestImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 dependencyManagement {

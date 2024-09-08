@@ -18,8 +18,16 @@ public class FullUserDto {
     private SettingsDto settings;
     private Collection<RoleDto> roles = new ArrayList<>();
     private Collection<ShortUserDetailsDto> contacts = new ArrayList<>();
-    private Collection<ShortMessageDto> messages;
-    private Collection<ShortRoomDto> rooms;
+    private Collection<ShortMessageDto> messages = new ArrayList<>();
+    private Collection<ShortRoomDto> rooms = new ArrayList<>();
+
+    public FullUserDto(String username, String password, String firstName, String lastName, String description) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.description = description;
+    }
 
 
     public void updateAttributes(@NonNull FullUserCredentialsDto credentials) {
