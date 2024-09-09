@@ -10,7 +10,6 @@ import com.example.apigateway.feignClients.ChatService;
 import com.example.apigateway.feignClients.UserManagementService;
 import com.example.apigateway.service.UserService;
 import io.restassured.RestAssured;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ public class ApiGatewayE2eTests {
 
     @BeforeAll
     public static void setUp() {
-        RestAssured.baseURI = "https://localhost";
+        RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
         RestAssured.basePath = "/api/v1";
     }
@@ -122,6 +121,10 @@ public class ApiGatewayE2eTests {
 
         protectedInfoResponse.body("username", equalTo(userToRegister.getUsername()));
     }
+
+
+
+
 
 
 
