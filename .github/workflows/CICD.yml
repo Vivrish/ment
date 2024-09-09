@@ -50,6 +50,26 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - ApiGateway
+          - AuthenticationService
+          - UserManagementService
+          - ChatService
+          - EurekaServer
+        container_name:
+          - apigateway
+          - authservice
+          - usermanagementservice
+          - chatservice
+          - eureka
+        tagged_container_name:
+          - apigateway:latest
+          - authservice:latest
+          - usermanagementservice:latest
+          - chatservice:latest
+          - eureka:latest
 
     steps:
       - name: Checkout code
@@ -71,15 +91,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          cd Microservices/ApiGateway
-          ./gradlew build --no-daemon
-          cd ../AuthenticationService
-          ./gradlew build --no-daemon
-          cd ../UserManagementService
-          ./gradlew build --no-daemon
-          cd ../ChatService
-          ./gradlew build --no-daemon
-          cd ../EurekaServer
+          cd Microservices/${{ matrix.service }}
           ./gradlew build --no-daemon
 
       - name: login to GitHub Container Registry
@@ -91,32 +103,15 @@ jobs:
 
       - name: Build Docker images
         run: |
-          cd Microservices/ApiGateway
-          docker build -t apigateway .
-          cd ../AuthenticationService
-          docker build -t authservice .
-          cd ../UserManagementService
-          docker build -t usermanagementservice .
-          cd ../ChatService
-          docker build -t chatservice .
-          cd ../EurekaServer
-          docker build -t eureka .
+          cd Microservices/${{ matrix.service }}
+          docker build -t ${{ matrix.container_name }} .
 
       - name: Push Docker images to registry
         env:
           DOCKER_REGISTRY: ghcr.io
         run: |
-          docker tag apigateway $DOCKER_REGISTRY/vivrish/apigateway:latest
-          docker tag authservice $DOCKER_REGISTRY/vivrish/authservice:latest
-          docker tag usermanagementservice $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
-          docker tag chatservice $DOCKER_REGISTRY/vivrish/chatservice:latest
-          docker tag eureka $DOCKER_REGISTRY/vivrish/eureka:latest
-
-          docker push $DOCKER_REGISTRY/vivrish/apigateway:latest
-          docker push $DOCKER_REGISTRY/vivrish/authservice:latest
-          docker push $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
-          docker push $DOCKER_REGISTRY/vivrish/chatservice:latest 
-          docker push $DOCKER_REGISTRY/vivrish/eureka:latest
+          docker tag ${{ matrix.container_name }} $DOCKER_REGISTRY/vivrish/${{ matrix.container_name }}:${{ matrix.tagged_container_name }}
+          docker push $DOCKER_REGISTRY/vivrish/${{ matrix.container_name }}:${{ matrix.tagged_container_name }}
 
   integration-tests:
     runs-on: ubuntu-latest

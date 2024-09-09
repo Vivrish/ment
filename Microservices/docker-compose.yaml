@@ -57,8 +57,6 @@ services:
     image: eureka:latest
     ports:
       - "8090:8090"
-    volumes:
-      - ./logs:/logs
 
   usermanagementservice:
     container_name: "UserManagementService"
