@@ -31,7 +31,7 @@ services:
       - "POSTGRES_PASSWORD=secret"
       - "POSTGRES_USER=admin"
     ports:
-      - "5432"
+      - "5432:5432"
 
   chats_db:
     image: "postgres:latest"
@@ -54,6 +54,7 @@ services:
       - "5433:5432"
 
   eureka:
+    container_name: "EurekaServer"
     image: ghcr.io/vivrish/eureka:latest
     ports:
       - "8090:8090"

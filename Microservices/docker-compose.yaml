@@ -54,6 +54,7 @@ services:
       - "5433:5432"
 
   eureka:
+    container_name: "EurekaServer"
     image: eureka:latest
     ports:
       - "8090:8090"
