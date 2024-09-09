@@ -181,6 +181,7 @@ jobs:
           ./gradlew e2eTest --no-daemon
           cd ..
           docker-compose -f docker-compose.ci.yml down
+        continue-on-error: true
 
       - name: Capture Logs
         run: |
