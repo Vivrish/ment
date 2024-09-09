@@ -183,3 +183,14 @@ jobs:
           ./gradlew e2eTest --no-daemon
           cd ..
           docker-compose -f docker-compose.ci.yml down
+
+      - name: Capture Logs
+        run: |
+          mkdir -p logs
+          cp -r ./logs/* logs/
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: service-logs
+          path: logs/
