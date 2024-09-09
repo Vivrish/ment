@@ -16,6 +16,14 @@ on:
 jobs:
   unit-tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - ApiGateway
+          - AuthenticationService
+          - UserManagementService
+          - ChatService
+          - EurekaServer
 
     steps:
       - name: Checkout code
@@ -37,15 +45,7 @@ jobs:
 
       - name: Run unit tests
         run: |
-          cd Microservices/ApiGateway
-          ./gradlew test --no-daemon
-          cd ../AuthenticationService
-          ./gradlew test --no-daemon
-          cd ../UserManagementService
-          ./gradlew test --no-daemon
-          cd ../ChatService
-          ./gradlew test --no-daemon
-          cd ../EurekaServer
+          cd Microservices/${{ matrix.service }}
           ./gradlew test --no-daemon
 
   build:
