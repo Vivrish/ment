@@ -186,7 +186,7 @@ jobs:
       - name: Capture Logs
         run: |
           mkdir -p logs
-          cp -r ./logs/* logs/
+          cp -r ./Microservices/logs/* logs/
 
       - name: Upload Logs
         uses: actions/upload-artifact@v3
