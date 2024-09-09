@@ -58,13 +58,15 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - ./logs/eureka:/logs
+      - ./logs/eureka:/app/logs
 
   usermanagementservice:
     container_name: "UserManagementService"
     image: ghcr.io/vivrish/usermanagementservice:latest
     ports:
       - "8060:8060"
+    volumes:
+      - ./logs/usermanagementservice:/app/logs
     depends_on:
       - kafka
       - user_details_db
@@ -74,6 +76,8 @@ services:
     image: ghcr.io/vivrish/chatservice:latest
     ports:
       - "8100:8100"
+    volumes:
+      - ./logs/chatservice:/app/logs
     depends_on:
       - kafka
       - chats_db
@@ -83,6 +87,8 @@ services:
     image: ghcr.io/vivrish/authservice:latest
     ports:
       - "8070:8070"
+    volumes:
+      - ./logs/authservice:/app/logs
     depends_on:
       - kafka
       - credentials_db
