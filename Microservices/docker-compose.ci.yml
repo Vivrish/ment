@@ -94,3 +94,26 @@ services:
       - kafka
       - credentials_db
       - eureka
+
+  apigateway:
+    container_name: "APIGateway"
+    image: ghcr.io/vivrish/apigateway:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./logs/apigateway:/app/logs
+    depends_on:
+      - kafka
+      - eureka
+      - authservice
+      - chatservice
+      - usermanagementservice
+
+  e2etests:
+    container_name: "E2ETests"
+    image: e2etests:latest
+    ports:
+      - "8020:8020"
+    volumes: -./logs/e2etests:/app/logs
+    depends_on:
+      - apigateway
