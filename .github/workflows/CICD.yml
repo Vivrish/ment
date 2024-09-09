@@ -58,18 +58,6 @@ jobs:
           - UserManagementService
           - ChatService
           - EurekaServer
-        container_name:
-          - apigateway
-          - authservice
-          - usermanagementservice
-          - chatservice
-          - eureka
-        tagged_container_name:
-          - apigateway:latest
-          - authservice:latest
-          - usermanagementservice:latest
-          - chatservice:latest
-          - eureka:latest
 
     steps:
       - name: Checkout code
@@ -102,16 +90,27 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker images
+        env:
+          ApiGateway: apigateway
+          AuthenticationService: authservice
+          UserManagementService: usermanagementservice
+          ChatService: chatservice
+          EurekaServer: eureka
         run: |
-          cd Microservices/${{ matrix.service }}
-          docker build -t ${{ matrix.container_name }} .
+          cd Microservices/${{ matrix.service }}  
+          docker build -t $${{ matrix.service }} .
 
       - name: Push Docker images to registry
         env:
           DOCKER_REGISTRY: ghcr.io
+          ApiGateway: apigateway
+          AuthenticationService: authservice
+          UserManagementService: usermanagementservice
+          ChatService: chatservice
+          EurekaServer: eureka
         run: |
-          docker tag ${{ matrix.container_name }} $DOCKER_REGISTRY/vivrish/${{ matrix.container_name }}:${{ matrix.tagged_container_name }}
-          docker push $DOCKER_REGISTRY/vivrish/${{ matrix.container_name }}:${{ matrix.tagged_container_name }}
+          docker tag $${{ matrix.service }} $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
+          docker push $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
 
   integration-tests:
     runs-on: ubuntu-latest
