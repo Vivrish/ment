@@ -45,6 +45,7 @@ class E2ETestsApplicationTests {
                 .post("/users")
                 .then()
                 .statusCode(200);
+        log.debug("User {} is registered successfully", userToRegister);
         given()
                 .when()
                 .contentType("application/json")
@@ -68,6 +69,8 @@ class E2ETestsApplicationTests {
                 .then()
                 .statusCode(200);
 
+        log.debug("User {} is registered successfully", userToRegister);
+
         ValidatableResponse loginResponse = given()
                 .when()
                 .contentType("application/json")
@@ -75,6 +78,8 @@ class E2ETestsApplicationTests {
                 .post("/users/login")
                 .then()
                 .statusCode(200);
+
+        log.debug("User {} is logged in successfully", userToRegister);
 
         String jwtToken = loginResponse.extract().asString();
         log.info("Extracted token: {}", jwtToken);
