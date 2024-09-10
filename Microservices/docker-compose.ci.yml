@@ -114,6 +114,7 @@ services:
     image: e2etests:latest
     ports:
       - "8020:8020"
-    volumes: -./logs/e2etests:/app/logs
+    volumes:
+      - ./logs/e2etests:/app/logs
     depends_on:
       - apigateway
