@@ -21,7 +21,7 @@ class E2ETestsApplicationTests {
     @BeforeAll
     public static void setUp() {
         log.debug("Setting up rest assured");
-        RestAssured.baseURI = "http://APIGateway";
+        RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
         RestAssured.basePath = "/api/v1";
         log.debug("Rest assured is set up");
@@ -52,11 +52,12 @@ class E2ETestsApplicationTests {
                 .post("/users/login")
                 .then()
                 .statusCode(403);
-        log.debug("Login scenario is complete");
+        log.debug("Incorrect login scenario is complete");
     }
 
     @Test
     public void correctLogin() {
+        log.debug("Starting correct login scenario");
         FullUserDto userToRegister = new FullUserDto("bil", "password", "billy", "bones", "pirate");
         FullUserCredentialsDto userToRegisterCredentials = new FullUserCredentialsDto(userToRegister);
         given()
@@ -85,6 +86,7 @@ class E2ETestsApplicationTests {
                 .statusCode(200);
 
         protectedInfoResponse.body("username", equalTo(userToRegister.getUsername()));
+        log.debug("Correct login scenario is complete");
     }
 
 }
