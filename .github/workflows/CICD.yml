@@ -166,16 +166,13 @@ jobs:
           docker pull $DOCKER_REGISTRY/vivrish/chatservice:latest 
           docker pull $DOCKER_REGISTRY/vivrish/eureka:latest
 
-      - name: Prepare the testing container
-        run: |
-          cd Microservices/E2ETests
-          docker build -t e2etests:latest .
-
       - name: Run E2E tests
         run: |
           cd Microservices
           docker-compose -f docker-compose.ci.yml up -d
-          sleep 120
+          sleep 30
+          cd E2ETests
+          ./gradlew test
           docker-compose -f docker-compose.ci.yml down
         continue-on-error: true
 
@@ -183,6 +180,7 @@ jobs:
         run: |
           mkdir -p logs
           cp -r ./Microservices/logs/* logs/
+          cp -r ./Microservices/E2ETests/logs/* logs/
 
       - name: Upload Logs
         uses: actions/upload-artifact@v3
