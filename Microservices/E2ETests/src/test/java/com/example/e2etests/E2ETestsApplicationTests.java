@@ -8,27 +8,33 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Slf4j
 class E2ETestsApplicationTests {
 
     @BeforeAll
     public static void setUp() {
+        log.debug("Setting up rest assured");
         RestAssured.baseURI = "http://APIGateway";
         RestAssured.port = 8080;
         RestAssured.basePath = "/api/v1";
+        log.debug("Rest assured is set up");
     }
 
     @Test
     void contextLoads() {
+        log.info("Context loads test passed");
     }
 
     @Test
     public void incorrectLogin() {
+        log.debug("Starting incorrect login scenario");
         FullUserDto userToRegister = new FullUserDto("bob", "password", "bobby", "bones", "pirate");
         FullUserCredentialsDto incorrectCredentials = new FullUserCredentialsDto(userToRegister);
         incorrectCredentials.setPassword("not_bobs_password");
@@ -46,6 +52,7 @@ class E2ETestsApplicationTests {
                 .post("/users/login")
                 .then()
                 .statusCode(403);
+        log.debug("Login scenario is complete");
     }
 
     @Test
