@@ -8,7 +8,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 public class FullUserDetailsDto {
-    private String nickname;
+    private String username;
     private String firstName;
     private String lastName;
     private String description;
@@ -17,7 +17,7 @@ public class FullUserDetailsDto {
 
 
     public FullUserDetailsDto(FullUserDto fullUserDto) {
-        this.nickname = fullUserDto.getUsername();
+        this.username = fullUserDto.getUsername();
         this.firstName = fullUserDto.getFirstName();
         this.lastName = fullUserDto.getLastName();
         this.description = fullUserDto.getDescription();
