@@ -9,12 +9,12 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 public class FullUserCredentialsDto {
-    private String nickname;
+    private String username;
     private String password;
     private Collection<RoleDto> roles = new ArrayList<>();
 
     public  FullUserCredentialsDto(FullUserDto fullUserDto) {
-        this.nickname = fullUserDto.getUsername();
+        this.username = fullUserDto.getUsername();
         this.password = fullUserDto.getPassword();
         this.roles = fullUserDto.getRoles();
     }
@@ -22,7 +22,7 @@ public class FullUserCredentialsDto {
     @Override
     public String toString() {
         return "FullUserCredentialsDto{" +
-                "nickname='" + nickname + '\'' +
+                "nickname='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

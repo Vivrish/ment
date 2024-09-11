@@ -14,25 +14,25 @@ import java.util.Collection;
 @NoArgsConstructor
 public class UserCredentialsDto {
 
-    private String nickname;
+    private String username;
     private String password;
     private Collection<RoleDto> roles;
 
     public UserCredentialsDto(String nickname, String password, Collection<RoleDto> roles) {
-        this.nickname = nickname;
+        this.username = nickname;
         this.password = password;
         this.roles = roles;
     }
 
 
     public UserCredentialsDto(String nickname, String password) {
-        this.nickname = nickname;
+        this.username = nickname;
         this.password = password;
         this.roles = new ArrayList<>();
     }
 
     public UserCredentialsDto(User user) {
-        this.nickname = user.getName();
+        this.username = user.getName();
         this.password = user.getPassword();
         this.roles = new ArrayList<>();
         for (Role role: user.getRoles()) {
