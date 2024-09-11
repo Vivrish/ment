@@ -32,11 +32,14 @@ public class ShortUserDto {
 
     public ShortUserDto(FullUserDto fullUser) {
         this.username = fullUser.getUsername();
-        for (ShortMessageDto message: fullUser.getMessages()) {
-            this.messages.add(message.getMessage());
+        for (ShortMessageDto messageEntity: fullUser.getMessages()){
+            messages.add(messageEntity.getMessage());
         }
-        for (ShortRoomDto room: fullUser.getRooms()) {
-            this.roomNames.add(room.getName());
+        for (ShortRoomDto roomEntity: fullUser.getRooms()) {
+            roomNames.add(roomEntity.getName());
+        }
+        for (ShortRoomDto roomEntity: fullUser.getConnections()) {
+            connectedRoomNames.add(roomEntity.getName());
         }
     }
 

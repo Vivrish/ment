@@ -16,7 +16,7 @@ import java.util.Collection;
 @Setter
 @NoArgsConstructor
 public class FullUserDto {
-    private String nickname;
+    private String username;
     private String firstName;
     private String lastName;
     private String description;
@@ -24,7 +24,7 @@ public class FullUserDto {
     private SettingsDto settings;
 
     public FullUserDto(User user) {
-        this.nickname = user.getNickname();
+        this.username = user.getNickname();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.description = user.getDescription();
@@ -38,7 +38,7 @@ public class FullUserDto {
     @Override
     public String toString() {
         return "FullUserDto{" +
-                "nickname='" + nickname + '\'' +
+                "nickname='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", description='" + description + '\'' +

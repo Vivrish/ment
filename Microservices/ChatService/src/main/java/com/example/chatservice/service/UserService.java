@@ -1,6 +1,6 @@
 package com.example.chatservice.service;
 
-import com.example.chatservice.DTO.FullChatUserDto;
+import com.example.chatservice.DTO.FullUserDto;
 import com.example.chatservice.DTO.ShortUserDto;
 import com.example.chatservice.domain.UserEntity;
 import com.example.chatservice.exception.UserDoesNotExistException;
@@ -17,20 +17,20 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public FullChatUserDto getUserByNickname(String nickname) {
+    public FullUserDto getUserByNickname(String nickname) {
         UserEntity user = getUserOrThrow(nickname);
-        return new FullChatUserDto(user);
+        return new FullUserDto(user);
     }
-    public FullChatUserDto addUser(ShortUserDto userToAdd) {
+    public FullUserDto addUser(ShortUserDto userToAdd) {
         UserEntity userEntity = new UserEntity(userToAdd);
         log.debug("Adding new user: {}",userToAdd);
-        return new FullChatUserDto(userRepository.save(userEntity));
+        return new FullUserDto(userRepository.save(userEntity));
     }
 
-    public FullChatUserDto editUser(String username, ShortUserDto userToEdit) {
+    public FullUserDto editUser(String username, ShortUserDto userToEdit) {
         UserEntity userEntity = getUserOrThrow(username);
         userEntity.setFields(userToEdit);
-        return new FullChatUserDto(userRepository.save(userEntity));
+        return new FullUserDto(userRepository.save(userEntity));
     }
 
     public void deleteUser(String username) {
