@@ -15,8 +15,8 @@ public interface AuthenticationService {
     void register(@RequestBody FullUserCredentialsDto user);
     @PostMapping("/api/v1/login")
     String login(@RequestBody FullUserCredentialsDto user);
-    @GetMapping("/api/v1/auth")
-    boolean authenticate(@RequestBody String token);
+    @GetMapping("/api/v1/auth/{token}")
+    boolean authenticate(@PathVariable String token);
     @GetMapping("api/v1/users/{username}")
     FullUserCredentialsDto getUserByName(@PathVariable String username);
 

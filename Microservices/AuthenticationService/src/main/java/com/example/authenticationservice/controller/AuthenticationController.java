@@ -62,8 +62,8 @@ public class AuthenticationController {
         return authenticationService.login(user);
     }
 
-    @GetMapping("/auth")
-    public boolean authenticate(@RequestBody String token) {
+    @GetMapping("/auth/{token}")
+    public boolean authenticate(@PathVariable String token) {
         log.debug("Request accepted: authenticate JWT {}", token);
         return jwtService.validateHeader(token);
     }
