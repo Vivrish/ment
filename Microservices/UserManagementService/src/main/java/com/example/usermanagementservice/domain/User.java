@@ -25,7 +25,7 @@ public class User {
     }
 
     public User(FullUserDto userDto) {
-        this.nickname = userDto.getNickname();
+        this.nickname = userDto.getUsername();
         this.firstName = userDto.getFirstName();
         this.lastName = userDto.getLastName();
         this.description = userDto.getDescription();
@@ -49,7 +49,7 @@ public class User {
 
 
     public void updateAttributes(FullUserDto fullUserDto) {
-        this.nickname = fullUserDto.getNickname();
+        this.nickname = fullUserDto.getUsername();
         this.firstName = fullUserDto.getFirstName();
         this.lastName = fullUserDto.getLastName();
         this.description = fullUserDto.getDescription();

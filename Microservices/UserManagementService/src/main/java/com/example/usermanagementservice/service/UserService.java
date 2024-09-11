@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public FullUserDto editUserByNickName(@NonNull FullUserDto updatedUser) throws UserDoesNotExistException {
-        User user = userRepository.getByNickname(updatedUser.getNickname());
+        User user = userRepository.getByNickname(updatedUser.getUsername());
         if (user == null) {
             throw new UserDoesNotExistException();
         }

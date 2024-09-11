@@ -40,9 +40,6 @@ public class UserService {
         return authenticationService.login(credentials);
     }
 
-
-
-
     public FullUserDto getUserByName(String username, String authHeader) {
         authenticate(authHeader);
         FullUserDto userDto = new FullUserDto();
