@@ -9,7 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
-        log.debug("Feign error intercepted: {}, {}", methodKey, response);
+        log.debug("Feign error intercepted: {}, {}", methodKey, response.toString());
         return new ResponseStatusException(
                 HttpStatusCode.valueOf(response.status()),
                 response.reason()
