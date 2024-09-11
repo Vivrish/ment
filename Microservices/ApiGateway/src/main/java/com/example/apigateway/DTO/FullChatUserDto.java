@@ -9,7 +9,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 public class FullChatUserDto {
-    private String nickname;
+    private String username;
     private Collection<ShortMessageDto> messages = new ArrayList<>();
     private Collection<ShortRoomDto> rooms = new ArrayList<>();
 }
