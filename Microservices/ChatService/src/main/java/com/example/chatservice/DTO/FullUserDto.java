@@ -1,9 +1,5 @@
 package com.example.chatservice.DTO;
 
-import com.example.chatservice.domain.MessageEntity;
-import com.example.chatservice.domain.RoomEntity;
-import com.example.chatservice.domain.UserEntity;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,23 +8,39 @@ import java.util.Collection;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class FullUserDto {
-    private String nickname;
+    private String username;
+    private String password;
+    private String firstName;
+    private String lastName;
+    private String description;
+    private SettingsDto settings;
+    private Collection<RoleDto> roles = new ArrayList<>();
+    private Collection<ShortUserDetailsDto> contacts = new ArrayList<>();
     private Collection<ShortMessageDto> messages = new ArrayList<>();
     private Collection<ShortRoomDto> rooms = new ArrayList<>();
-    private Collection<ShortRoomDto> connections = new ArrayList<>();
 
-    public FullUserDto(UserEntity userEntity) {
-        this.nickname = userEntity.getNickname();
-        for (MessageEntity messageEntity: userEntity.getMessages()) {
-            this.messages.add(new ShortMessageDto(messageEntity));
-        }
-        for (RoomEntity roomEntity: userEntity.getRooms()) {
-            this.rooms.add(new ShortRoomDto(roomEntity));
-        }
-        for (RoomEntity roomEntity: userEntity.getConnections()) {
-            this.connections.add(new ShortRoomDto(roomEntity));
-        }
+    public FullUserDto(String username, String password, String firstName, String lastName, String description) {
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "FullUserDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", description='" + description + '\'' +
+                ", settings=" + settings +
+                ", roles=" + roles +
+                ", contacts=" + contacts +
+                ", messages=" + messages +
+                ", rooms=" + rooms +
+                '}';
     }
 }

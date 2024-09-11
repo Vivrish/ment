@@ -32,7 +32,7 @@ public class UserService {
         log.debug("Sending POST request to auth service: {}", userCredentials);
         authenticationService.register(userCredentials);
         log.debug("Adding user to the register topic: {}", userDto);
-        kafkaTemplate.send("register", new FullUserDetailsDto(userDto));
+        kafkaTemplate.send("register", userDto);
     }
 
     public String login(@NonNull FullUserCredentialsDto credentials) {

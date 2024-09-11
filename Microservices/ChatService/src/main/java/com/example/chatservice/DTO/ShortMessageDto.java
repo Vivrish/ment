@@ -22,4 +22,14 @@ public class ShortMessageDto {
         this.roomName = messageEntity.getRoom().getName();
         this.senderName = messageEntity.getSender().getNickname();
     }
+
+    @Override
+    public String toString() {
+        return "ShortMessageDto{" +
+                "message='" + message + '\'' +
+                ", timeStamp=" + timeStamp +
+                ", roomName='" + roomName + '\'' +
+                ", senderName='" + senderName + '\'' +
+                '}';
+    }
 }

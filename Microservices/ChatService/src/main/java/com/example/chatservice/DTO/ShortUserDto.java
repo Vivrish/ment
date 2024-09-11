@@ -30,4 +30,23 @@ public class ShortUserDto {
     }
 
 
+    public ShortUserDto(FullUserDto fullUser) {
+        this.username = fullUser.getUsername();
+        for (ShortMessageDto message: fullUser.getMessages()) {
+            this.messages.add(message.getMessage());
+        }
+        for (ShortRoomDto room: fullUser.getRooms()) {
+            this.roomNames.add(room.getName());
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "ShortUserDto{" +
+                "username='" + username + '\'' +
+                ", messages=" + messages +
+                ", roomNames=" + roomNames +
+                ", connectedRoomNames=" + connectedRoomNames +
+                '}';
+    }
 }

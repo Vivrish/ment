@@ -1,33 +1,36 @@
 package com.example.chatservice.service;
 
-import com.example.chatservice.DTO.FullUserDto;
+import com.example.chatservice.DTO.FullChatUserDto;
 import com.example.chatservice.DTO.ShortUserDto;
 import com.example.chatservice.domain.UserEntity;
 import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
 @AllArgsConstructor
+@Slf4j
 public class UserService {
     private final UserRepository userRepository;
 
-    public FullUserDto getUserByNickname(String nickname) {
+    public FullChatUserDto getUserByNickname(String nickname) {
         UserEntity user = getUserOrThrow(nickname);
-        return new FullUserDto(user);
+        return new FullChatUserDto(user);
     }
-    public FullUserDto addUser(ShortUserDto userToAdd) {
+    public FullChatUserDto addUser(ShortUserDto userToAdd) {
         UserEntity userEntity = new UserEntity(userToAdd);
-        return new FullUserDto(userRepository.save(userEntity));
+        log.debug("Adding new user: {}",userToAdd);
+        return new FullChatUserDto(userRepository.save(userEntity));
     }
 
-    public FullUserDto editUser(String username, ShortUserDto userToEdit) {
+    public FullChatUserDto editUser(String username, ShortUserDto userToEdit) {
         UserEntity userEntity = getUserOrThrow(username);
         userEntity.setFields(userToEdit);
-        return new FullUserDto(userRepository.save(userEntity));
+        return new FullChatUserDto(userRepository.save(userEntity));
     }
 
     public void deleteUser(String username) {
