@@ -86,6 +86,7 @@ jobs:
         run: |
           echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
           echo "USERNAME=Vivrish" >> $GITHUB_ENV
+          cat $GITHUB_ENV
 
       - name: Build with Gradle
         run: |
