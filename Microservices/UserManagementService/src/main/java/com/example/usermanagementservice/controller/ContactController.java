@@ -1,9 +1,8 @@
 package com.example.usermanagementservice.controller;
 
-import com.example.usermanagementservice.DTO.ContactDto;
-import com.example.usermanagementservice.DTO.TwoNicknamesDto;
 import com.example.usermanagementservice.service.ContactService;
-import com.example.usermanagementservice.service.UserService;
+import com.xent.DTO.UserManagementService.ContactDto;
+import com.xent.DTO.UserManagementService.TwoNicknamesDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

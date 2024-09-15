@@ -1,6 +1,6 @@
-package com.example.authenticationservice.DTO;
+package com.xent.DTO.AuthenticationService;
 
-import com.example.authenticationservice.domain.Role;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +14,5 @@ public class RoleDto {
         this.name = name;
     }
 
-    public RoleDto(Role role) {
-        this.name = role.getName();
-    }
+
 }

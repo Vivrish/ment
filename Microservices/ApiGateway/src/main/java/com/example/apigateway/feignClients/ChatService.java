@@ -1,8 +1,8 @@
 package com.example.apigateway.feignClients;
 
 
-import com.example.apigateway.DTO.FullChatUserDto;
 import com.example.apigateway.config.FeignConfig;
+import com.xent.DTO.ChatService.FullChatUserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;

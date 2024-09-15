@@ -1,5 +1,13 @@
-package com.example.apigateway.DTO;
+package com.xent.DTO.APIGateway;
 
+import com.xent.DTO.AuthenticationService.RoleDto;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
+import com.xent.DTO.ChatService.FullChatUserDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
+import com.xent.DTO.UserManagementService.ContactDto;
+import com.xent.DTO.UserManagementService.FullUserDetailsDto;
+import com.xent.DTO.UserManagementService.SettingsDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -17,10 +25,9 @@ public class FullUserDto {
     private String description;
     private SettingsDto settings;
     private Collection<RoleDto> roles = new ArrayList<>();
-    private Collection<ShortUserDetailsDto> contacts = new ArrayList<>();
+    private Collection<ContactDto> contacts = new ArrayList<>();
     private Collection<ShortMessageDto> messages = new ArrayList<>();
     private Collection<ShortRoomDto> rooms = new ArrayList<>();
-
     public FullUserDto(String username, String password, String firstName, String lastName, String description) {
         this.username = username;
         this.password = password;
@@ -30,8 +37,8 @@ public class FullUserDto {
     }
 
 
-    public void updateAttributes(@NonNull FullUserCredentialsDto credentials) {
-        this.username = credentials.getNickname();
+    public void updateAttributes(@NonNull UserCredentialsDto credentials) {
+        this.username = credentials.getUsername();
         this.password = credentials.getPassword();
         this.roles = credentials.getRoles();
     }
@@ -51,7 +58,7 @@ public class FullUserDto {
 
     @Override
     public String toString() {
-        return "FullUserDto{" +
+        return "FullUserDetailsDto{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +

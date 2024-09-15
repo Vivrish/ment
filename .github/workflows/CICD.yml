@@ -43,6 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Set up environment variables
+        run: |
+          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
+
       - name: Run unit tests
         run: |
           cd Microservices/${{ matrix.service }}
@@ -76,6 +81,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+
+      - name: Set up environment variables
+        run: |
+          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
 
       - name: Build with Gradle
         run: |
@@ -125,6 +135,11 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
+      - name: Set up environment variables
+        run: |
+          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
+
       - name: Run integration tests
         run: |
           cd Microservices/ApiGateway
@@ -165,6 +180,11 @@ jobs:
           docker pull $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
           docker pull $DOCKER_REGISTRY/vivrish/chatservice:latest 
           docker pull $DOCKER_REGISTRY/vivrish/eureka:latest
+
+      - name: Set up environment variables
+        run: |
+          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
+          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
 
       - name: Run E2E tests
         run: |

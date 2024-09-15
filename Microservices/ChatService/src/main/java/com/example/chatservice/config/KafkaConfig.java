@@ -1,6 +1,6 @@
 package com.example.chatservice.config;
 
-import com.example.chatservice.DTO.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

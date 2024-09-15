@@ -1,7 +1,6 @@
 package com.example.chatservice.service;
 
-import com.example.chatservice.DTO.FullRoomDto;
-import com.example.chatservice.DTO.ShortRoomDto;
+import com.example.chatservice.DTO.Converter;
 import com.example.chatservice.domain.RoomEntity;
 import com.example.chatservice.domain.TopicEntity;
 import com.example.chatservice.domain.UserEntity;
@@ -12,6 +11,8 @@ import com.example.chatservice.exception.UserIsNotAMemberException;
 import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.TopicRepository;
 import com.example.chatservice.repository.UserRepository;
+import com.xent.DTO.ChatService.FullRoomDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,16 +33,17 @@ public class RoomService {
     private final UserRepository userRepository;
     private final TopicRepository topicRepository;
     private final KafkaAdmin kafkaAdmin;
+    private final Converter converter;
 
     public FullRoomDto getRoomByName(String name) {
         RoomEntity roomEntity = getRoomOrThrow(name);
-        return new FullRoomDto(roomEntity);
+        return converter.fullRoomDto(roomEntity);
     }
 
     public Collection<FullRoomDto> getAll() {
         Collection<FullRoomDto> rooms = new ArrayList<>();
         for (RoomEntity roomEntity: roomRepository.findAll()) {
-            rooms.add(new FullRoomDto(roomEntity));
+            rooms.add(converter.fullRoomDto(roomEntity));
         }
         return rooms;
     }
@@ -53,13 +55,13 @@ public class RoomService {
         topicRepository.save(topicEntity);
         roomEntity.setTopic(topicEntity);
         createTopic(topicEntity.getTopicName());
-        return new FullRoomDto(roomRepository.save(roomEntity));
+        return converter.fullRoomDto(roomRepository.save(roomEntity));
     }
 
     public FullRoomDto editRoom(String name, ShortRoomDto shortRoomDto) {
         RoomEntity roomEntity = getRoomOrThrow(name);
         roomEntity.setFields(shortRoomDto);
-        return new FullRoomDto(roomRepository.save(roomEntity));
+        return converter.fullRoomDto(roomRepository.save(roomEntity));
     }
 
     public void deleteRoom(String name) {
@@ -81,7 +83,7 @@ public class RoomService {
             throw new UserAlreadyAMemberException();
         }
         roomEntity.addMember(userEntity);
-        return new FullRoomDto(roomRepository.save(roomEntity));
+        return converter.fullRoomDto(roomRepository.save(roomEntity));
     }
 
     public FullRoomDto deleteMember(String roomName, String username) {
@@ -93,7 +95,7 @@ public class RoomService {
             throw new UserIsNotAMemberException();
         }
         roomEntity.deleteMember(userEntity);
-        return new FullRoomDto(roomRepository.save(roomEntity));
+        return converter.fullRoomDto(roomRepository.save(roomEntity));
     }
 
     private void createTopic(String topicName) {

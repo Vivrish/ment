@@ -1,5 +1,6 @@
 HELP.md
 .gradle
+gradle.properties
 build/
 logs/*
 !gradle/wrapper/gradle-wrapper.jar

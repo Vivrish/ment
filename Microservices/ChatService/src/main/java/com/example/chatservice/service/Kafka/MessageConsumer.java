@@ -1,13 +1,12 @@
 package com.example.chatservice.service.Kafka;
 
-import com.example.chatservice.DTO.FullUserDto;
-import com.example.chatservice.DTO.ShortMessageDto;
-
-import com.example.chatservice.DTO.ShortUserDto;
 import com.example.chatservice.service.MessageService;
 import com.example.chatservice.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xent.DTO.ChatService.FullChatUserDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortChatUserDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -35,10 +34,10 @@ public class MessageConsumer {
     @KafkaListener(topics = "register", groupId = "main")
     public void consumeRegister(String message) throws JsonProcessingException {
         log.debug("Deserializing message: {}", message);
-        FullUserDto fullUser = objectMapper.readValue(message, FullUserDto.class);
+        FullChatUserDto fullUser = objectMapper.readValue(message, FullChatUserDto.class);
         log.debug("Deserialized: {}", fullUser);
         log.debug("Consumed message on topic register: {}", fullUser);
-        userService.addUser(new ShortUserDto(fullUser));
+        userService.addUser(new ShortChatUserDto(fullUser));
     }
 
 

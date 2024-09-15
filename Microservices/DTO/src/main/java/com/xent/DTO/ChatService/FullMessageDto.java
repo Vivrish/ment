@@ -1,4 +1,5 @@
-package com.example.apigateway.DTO;
+package com.xent.DTO.ChatService;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShortMessageDto {
+public class FullMessageDto {
     private String message;
+    private ShortRoomDto room;
+    private ShortChatUserDto sender;
     private LocalDateTime timeStamp;
-    private String roomName;
-    private String senderName;
+
 }

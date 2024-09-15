@@ -27,7 +27,20 @@ ext {
     set('springCloudVersion', "2023.0.3")
 }
 
+repositories {
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/Vivrish/ment")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+        }
+    }
+    mavenCentral()
+}
+
 dependencies {
+    implementation 'com.xent:dto:1.0.0-SNAPSHOT'
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.apache.kafka:kafka-clients:3.4.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind'

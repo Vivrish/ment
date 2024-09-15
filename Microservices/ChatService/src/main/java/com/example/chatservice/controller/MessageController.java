@@ -1,8 +1,8 @@
 package com.example.chatservice.controller;
 
-import com.example.chatservice.DTO.FullMessageDto;
-import com.example.chatservice.DTO.ShortMessageDto;
 import com.example.chatservice.service.MessageService;
+import com.xent.DTO.ChatService.FullMessageDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

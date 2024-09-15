@@ -1,9 +1,7 @@
-package com.example.authenticationservice.DTO;
+package com.xent.DTO.AuthenticationService;
 
 
-import com.example.authenticationservice.domain.Role;
-import com.example.authenticationservice.domain.User;
-import lombok.AllArgsConstructor;
+import com.xent.DTO.APIGateway.FullUserDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +16,12 @@ public class UserCredentialsDto {
     private String password;
     private Collection<RoleDto> roles;
 
+    public UserCredentialsDto(FullUserDto fullUser) {
+        this.username = fullUser.getUsername();
+        this.password = fullUser.getPassword();
+        this.roles = fullUser.getRoles();
+    }
+
     public UserCredentialsDto(String nickname, String password, Collection<RoleDto> roles) {
         this.username = nickname;
         this.password = password;
@@ -31,14 +35,6 @@ public class UserCredentialsDto {
         this.roles = new ArrayList<>();
     }
 
-    public UserCredentialsDto(User user) {
-        this.username = user.getName();
-        this.password = user.getPassword();
-        this.roles = new ArrayList<>();
-        for (Role role: user.getRoles()) {
-            roles.add(new RoleDto(role));
-        }
-    }
 
 
     public void addRole(RoleDto roleDto) {

@@ -1,8 +1,8 @@
 package com.example.authenticationservice.controller;
 
-import com.example.authenticationservice.DTO.UserCredentialsDto;
 import com.example.authenticationservice.service.AuthenticationService;
 import com.example.authenticationservice.service.JwtService;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -46,9 +46,7 @@ public class AuthenticationController {
     })
     @PostMapping("/register")
     public void register(@RequestBody @NonNull UserCredentialsDto user) {
-        log.debug("Request accepted: register a user with attributes: {} {}",
-                 user.getNickname(),
-                 user.getPassword());
+        log.debug("Request accepted: register a user {}", user);
         authenticationService.register(user);
     }
 

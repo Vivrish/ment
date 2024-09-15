@@ -1,12 +1,14 @@
-package com.example.usermanagementservice.DTO;
+package com.xent.DTO.UserManagementService;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @AllArgsConstructor
 @Setter
 @Getter
+@NoArgsConstructor
 public class TwoNicknamesDto {
     private String nicknameOne;
     private String nicknameOther;
