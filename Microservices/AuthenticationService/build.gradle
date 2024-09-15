@@ -27,8 +27,8 @@ repositories {
 		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/Vivrish/ment")
 		credentials {
-			username = System.getenv("USERNAME")
-			password = System.getenv("TOKEN")
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
 		}
 	}
 	mavenCentral()

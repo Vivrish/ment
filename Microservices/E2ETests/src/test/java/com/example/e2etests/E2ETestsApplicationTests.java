@@ -1,7 +1,7 @@
 package com.example.e2etests;
 
-import com.example.e2etests.DTO.FullUserCredentialsDto;
-import com.example.e2etests.DTO.FullUserDto;
+import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ class E2ETestsApplicationTests {
     public void incorrectLogin() {
         log.debug("Starting incorrect login scenario");
         FullUserDto userToRegister = new FullUserDto("bob", "password", "bobby", "bones", "pirate");
-        FullUserCredentialsDto incorrectCredentials = new FullUserCredentialsDto(userToRegister);
+        UserCredentialsDto incorrectCredentials = new UserCredentialsDto(userToRegister);
         incorrectCredentials.setPassword("not_bobs_password");
         given()
                 .when()
@@ -60,7 +60,7 @@ class E2ETestsApplicationTests {
     public void correctLogin() {
         log.debug("Starting correct login scenario");
         FullUserDto userToRegister = new FullUserDto("bil", "password", "billy", "bones", "pirate");
-        FullUserCredentialsDto userToRegisterCredentials = new FullUserCredentialsDto(userToRegister);
+        UserCredentialsDto userToRegisterCredentials = new UserCredentialsDto(userToRegister);
         given()
                 .when()
                 .contentType("application/json")

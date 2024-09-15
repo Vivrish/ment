@@ -80,6 +80,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: publish the DTO package
+        env:
+          USERNAME: ${{github.actor}}
+          TOKEN: ${{secrets.PAT}}
+        run: |
+          cd Microservices/dto
+          ./gradlew build publish
+
       - name: Build with Gradle
         env:
           USERNAME: ${{github.actor}}
