@@ -27,8 +27,11 @@ repositories {
 		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/Vivrish/ment")
 		credentials {
-			username =  System.getenv("USERNAME")
-			password = System.getenv("TOKEN")
+			username =  System.getenv("REPO_USERNAME")
+			password = System.getenv("REPO_TOKEN")
+			println "REPO_USERNAME: ${System.getenv('REPO_USERNAME')}"
+			println "REPO_TOKEN is set: ${System.getenv('REPO_TOKEN')}"
+
 		}
 	}
 	mavenCentral()

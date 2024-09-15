@@ -43,12 +43,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Set up environment variables
-        run: |
-          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
-          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
-
       - name: Run unit tests
+        env:
+          USERNAME: ${{github.actor}}
+          TOKEN: ${{secrets.PAT}}
         run: |
           cd Microservices/${{ matrix.service }}
           ./gradlew test --no-daemon
@@ -82,12 +80,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Set up environment variables
-        run: |
-          echo "TOKEN=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" >> $GITHUB_ENV
-          echo "USERNAME=Vivrish" >> $GITHUB_ENV
-
       - name: Build with Gradle
+        env:
+          USERNAME: ${{github.actor}}
+          TOKEN: ${{secrets.PAT}}
         run: |
           cd Microservices/${{ matrix.service }}
           ./gradlew build -x test --no-daemon
@@ -135,12 +131,10 @@ jobs:
           java-version: "21"
           distribution: "temurin"
 
-      - name: Set up environment variables
-        run: |
-          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
-          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
-
       - name: Run integration tests
+        env:
+          USERNAME: ${{github.actor}}
+          TOKEN: ${{secrets.PAT}}
         run: |
           cd Microservices/ApiGateway
           ./gradlew integrationTest --no-daemon
@@ -181,12 +175,10 @@ jobs:
           docker pull $DOCKER_REGISTRY/vivrish/chatservice:latest 
           docker pull $DOCKER_REGISTRY/vivrish/eureka:latest
 
-      - name: Set up environment variables
-        run: |
-          echo "TOKEN=${{ secrets.PAT }}" >> $GITHUB_ENV
-          echo "USERNAME=${{ github.actor }}" >> $GITHUB_ENV
-
       - name: Run E2E tests
+        env:
+          USERNAME: ${{github.actor}}
+          TOKEN: ${{secrets.PAT}}
         run: |
           cd Microservices
           docker-compose -f docker-compose.ci.yml up -d
