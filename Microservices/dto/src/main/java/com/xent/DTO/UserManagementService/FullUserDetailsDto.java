@@ -2,8 +2,10 @@ package com.xent.DTO.UserManagementService;
 
 
 
+import com.xent.DTO.APIGateway.FullUserDto;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
@@ -14,8 +16,17 @@ public class FullUserDetailsDto {
     private String firstName;
     private String lastName;
     private String description;
-    private Collection<ContactDto> contacts;
+    private Collection<ContactDto> contacts = new ArrayList<>();
     private SettingsDto settings;
+
+    public FullUserDetailsDto(FullUserDto fullUser) {
+        this.username = fullUser.getUsername();
+        this.firstName = fullUser.getFirstName();
+        this.lastName = fullUser.getLastName();
+        this.description = fullUser.getDescription();
+        this.contacts = fullUser.getContacts();
+        this.settings = fullUser.getSettings();
+    }
 
 
     @Override

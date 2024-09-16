@@ -1,5 +1,6 @@
 package com.example.chatservice.config;
 
+import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -20,36 +21,71 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
+    // Configuration for topics that use ShorMessageDto
     @Bean
-    public ProducerFactory<String, ShortMessageDto> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
+    public ProducerFactory<String, ShortMessageDto> producerFactoryMessage() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
     }
 
     @Bean
-    public KafkaTemplate<String, ShortMessageDto> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public KafkaTemplate<String, ShortMessageDto> kafkaTemplateMessage() {
+        return new KafkaTemplate<>(producerFactoryMessage());
     }
 
     @Bean
-    public ConsumerFactory<String, ShortMessageDto> consumerFactory() {
+    public ConsumerFactory<String, ShortMessageDto> consumerFactoryMessage() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> kafkaListenerContainerFactoryMessage() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryMessage());
+        return factory;
+    }
+
+    // Configuration for topics that use FullUserDto
+
+    @Bean
+    public ProducerFactory<String, FullUserDto> producerFactoryUser() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, FullUserDto> kafkaTemplateUser() {
+        return new KafkaTemplate<>(producerFactoryUser());
+    }
+
+    @Bean
+    public ConsumerFactory<String, FullUserDto> consumerFactoryUser() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, FullUserDto> kafkaListenerContainerFactoryUser() {
+        ConcurrentKafkaListenerContainerFactory<String, FullUserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryUser());
+        return factory;
+    }
+
+    // Shared props
+
+    private Map<String, Object> generateProps() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "main");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "com.example.chatservice.DTO");
-        return new DefaultKafkaConsumerFactory<>(props);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return props;
     }
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(consumerFactory());
-        return factory;
+    private Map<String, Object> generateConfigProps() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return configProps;
     }
 
 }

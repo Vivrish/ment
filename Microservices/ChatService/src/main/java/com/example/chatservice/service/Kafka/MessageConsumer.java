@@ -4,6 +4,7 @@ import com.example.chatservice.service.MessageService;
 import com.example.chatservice.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.ChatService.FullChatUserDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortChatUserDto;
@@ -32,12 +33,9 @@ public class MessageConsumer {
     }
 
     @KafkaListener(topics = "register", groupId = "main")
-    public void consumeRegister(String message) throws JsonProcessingException {
-        log.debug("Deserializing message: {}", message);
-        FullChatUserDto fullUser = objectMapper.readValue(message, FullChatUserDto.class);
-        log.debug("Deserialized: {}", fullUser);
-        log.debug("Consumed message on topic register: {}", fullUser);
-        userService.addUser(new ShortChatUserDto(fullUser));
+    public void consumeRegister(FullUserDto fullUserToRegister) {
+        log.debug("Consumed message on topic register: {}", fullUserToRegister);
+        userService.addUser(new ShortChatUserDto(fullUserToRegister));
     }
 
 

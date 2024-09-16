@@ -28,6 +28,7 @@ public class FullUserDto {
     private Collection<ContactDto> contacts = new ArrayList<>();
     private Collection<ShortMessageDto> messages = new ArrayList<>();
     private Collection<ShortRoomDto> rooms = new ArrayList<>();
+    private Collection<ShortRoomDto> connectedRooms = new ArrayList<>();
     public FullUserDto(String username, String password, String firstName, String lastName, String description) {
         this.username = username;
         this.password = password;
