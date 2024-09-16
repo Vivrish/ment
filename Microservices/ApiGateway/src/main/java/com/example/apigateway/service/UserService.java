@@ -28,9 +28,6 @@ public class UserService {
     private final KafkaTemplate<String, FullUserDto> kafkaTemplate;
 
     public void addUser(@NonNull FullUserDto userDto) {
-        UserCredentialsDto userCredentials = new UserCredentialsDto(userDto);
-        log.debug("Sending POST request to auth service: {}", userCredentials);
-        authenticationService.register(userCredentials);
         log.debug("Adding user to the register topic: {}", userDto);
         kafkaTemplate.send("register", userDto);
     }

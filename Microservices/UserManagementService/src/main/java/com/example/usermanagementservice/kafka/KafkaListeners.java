@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaListeners {
     private final UserService userService;
-    @KafkaListener(topics = "register", groupId = "main")
+    @KafkaListener(topics = "register", groupId = "userManagementService")
     public void register(FullUserDto fullUserToRegister) {
         log.debug("Registering user: {}", fullUserToRegister);
         userService.createUser(new FullUserDetailsDto(fullUserToRegister));

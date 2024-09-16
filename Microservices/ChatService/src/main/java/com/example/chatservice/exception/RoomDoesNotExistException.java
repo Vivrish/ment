@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class RoomDoesNotExistException extends ResponseStatusException {
     public RoomDoesNotExistException() {
-        super(HttpStatus.BAD_REQUEST, "Room does not exist");
+        super(HttpStatus.NOT_FOUND, "Room does not exist");
     }
 }

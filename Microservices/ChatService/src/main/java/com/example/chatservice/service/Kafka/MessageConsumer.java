@@ -8,7 +8,6 @@ import com.xent.DTO.ChatService.ShortChatUserDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,7 @@ public class MessageConsumer {
         log.debug("Message consumed: {}", message.getMessage());
     }
 
-    @KafkaListener(topics = "register", groupId = "main", containerFactory = "kafkaListenerContainerFactoryUser")
+    @KafkaListener(topics = "register", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryUser")
     public void consumeRegister(FullUserDto fullUserToRegister) {
         log.debug("Consumed message on topic register: {}", fullUserToRegister);
         userService.addUser(new ShortChatUserDto(fullUserToRegister));
