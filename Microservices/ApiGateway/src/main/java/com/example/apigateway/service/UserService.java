@@ -25,7 +25,7 @@ public class UserService {
     private final AuthenticationService authenticationService;
     private final UserManagementService userManagementService;
     private final ChatService chatService;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, FullUserDto> kafkaTemplate;
 
     public void addUser(@NonNull FullUserDto userDto) {
         UserCredentialsDto userCredentials = new UserCredentialsDto(userDto);

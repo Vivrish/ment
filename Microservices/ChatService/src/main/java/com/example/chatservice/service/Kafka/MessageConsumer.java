@@ -22,7 +22,6 @@ public class MessageConsumer {
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageService messageService;
     private final UserService userService;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(topicPattern = "topic-room-.*", groupId = "main")
     public void consumeRoomMessage(ShortMessageDto message) {
