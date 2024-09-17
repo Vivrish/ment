@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -44,7 +46,7 @@ class E2ETestsApplicationTests {
                 .body(userToRegister)
                 .post("/users")
                 .then()
-                .statusCode(200);
+                .statusCode(202);
         log.debug("User {} is registered successfully", userToRegister);
         given()
                 .when()
@@ -67,7 +69,7 @@ class E2ETestsApplicationTests {
                 .body(userToRegister)
                 .post("/users")
                 .then()
-                .statusCode(200);
+                .statusCode(202);
 
         log.debug("User {} is registered successfully", userToRegister);
 
@@ -95,9 +97,27 @@ class E2ETestsApplicationTests {
     }
 
     @Test
-    public void gatherAllInformation() {
-        log.debug("Starting gather all information scenario");
-
+    public void partialFailure() {
+        log.debug("Starting partial failure scenario");
+        FullUserDto userToRegister = new FullUserDto("ant", "pwd", null, "Banderas", "actor");
+        UserCredentialsDto userToRegisterCredentials = new UserCredentialsDto(userToRegister);
+        log.debug("Trying to register a user with null first name: {}", userToRegister);
+        given()
+                .when()
+                .contentType("application/json")
+                .body(userToRegister)
+                .post("/users")
+                .then()
+                .statusCode(202);
+        log.debug("Server has accepted the request with null first name");
+        given()
+                .when()
+                .contentType("application/json")
+                .body(userToRegisterCredentials)
+                .post("/users/login")
+                .then()
+                .statusCode(404);
+        log.debug("Partial failure scenario is complete");
     }
 
 }
