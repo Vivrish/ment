@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class FailureDto {
     private String serviceName;
-    private Exception reason;
+    private String reason;
     private String rollbackIdentification;
 
     @Override

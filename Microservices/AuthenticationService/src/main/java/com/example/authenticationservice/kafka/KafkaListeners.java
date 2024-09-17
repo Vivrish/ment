@@ -24,7 +24,7 @@ public class KafkaListeners {
             authenticationService.register(userCredentialsDto);
         }
         catch (Exception e) {
-            FailureDto failure = new FailureDto("AuthService", e, fullUserDto.getUsername());
+            FailureDto failure = new FailureDto("AuthService", e.toString(), fullUserDto.getUsername());
             log.error("Error while registering user. Initiating failure procedure: {}", fullUserDto);
             failureTemplate.send("register-failure", failure);
         }

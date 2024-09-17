@@ -39,7 +39,7 @@ public class MessageConsumer {
             userService.addUser(new ShortChatUserDto(fullUserToRegister));
         }
         catch (Exception e) {
-            FailureDto failure = new FailureDto("ChatService", e, fullUserToRegister.getUsername());
+            FailureDto failure = new FailureDto("ChatService", e.toString(), fullUserToRegister.getUsername());
             log.error("Error while registering user. Initiating failure procedure: {}", fullUserToRegister);
             failureTemplate.send("register-failure", failure);
         }

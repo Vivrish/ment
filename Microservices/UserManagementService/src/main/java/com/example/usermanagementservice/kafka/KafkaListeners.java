@@ -23,7 +23,7 @@ public class KafkaListeners {
             userService.createUser(new FullUserDetailsDto(fullUserToRegister));
         }
         catch (Exception e) {
-            FailureDto failure = new FailureDto("UserManagementService", e, fullUserToRegister.getUsername());
+            FailureDto failure = new FailureDto("UserManagementService", e.toString(), fullUserToRegister.getUsername());
             log.error("Error while registering user. Initiating failure procedure: {}", fullUserToRegister);
             failureTemplate.send("register-failure", failure);
         }
