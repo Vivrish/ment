@@ -62,8 +62,11 @@ public class AuthenticationService {
         log.info("Registered user {}", user.getUsername());
     }
 
-    public String login(UserCredentialsDto user) throws IncorrectCredentialsException {
+    public String login(UserCredentialsDto user) throws IncorrectCredentialsException, NameDoesNotExistException {
         log.info("Login attempt by {}", user.getUsername());
+        if (!authRepository.existsByName(user.getUsername())) {
+            throw new NameDoesNotExistException();
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (!authentication.isAuthenticated()) {
