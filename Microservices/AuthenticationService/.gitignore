@@ -40,4 +40,5 @@ out/
 ### Other ###
 
 .DS_Store
+gradle.properties
 

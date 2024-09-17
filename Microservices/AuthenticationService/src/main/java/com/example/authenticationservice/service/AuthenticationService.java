@@ -44,7 +44,7 @@ public class AuthenticationService {
         return userCredentialsDtos;
     }
 
-    public void register(UserCredentialsDto user) throws RoleDoesNotExistException {
+    public void register(UserCredentialsDto user) throws RoleDoesNotExistException, NameDoesNotExistException {
         log.info("Registering user {}", user.getUsername());
         User savedUser = new User(user.getUsername(), encoder.encode(user.getPassword()));
         if (authRepository.existsByName(user.getUsername())) {
@@ -62,8 +62,11 @@ public class AuthenticationService {
         log.info("Registered user {}", user.getUsername());
     }
 
-    public String login(UserCredentialsDto user) throws IncorrectCredentialsException {
+    public String login(UserCredentialsDto user) throws IncorrectCredentialsException, NameDoesNotExistException {
         log.info("Login attempt by {}", user.getUsername());
+        if (!authRepository.existsByName(user.getUsername())) {
+            throw new NameDoesNotExistException();
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (!authentication.isAuthenticated()) {
@@ -80,5 +83,12 @@ public class AuthenticationService {
         User user = authRepository.findUserByName(username)
                 .orElseThrow(NameDoesNotExistException::new);
         return converter.userCredentialsDto(user);
+    }
+
+    public void deleteUserIfExists(String username) {
+        log.debug("Deleting user: {}", username);
+        if (authRepository.existsByName(username)) {
+            authRepository.deleteByName(username);
+        }
     }
 }

@@ -42,6 +42,12 @@ public class UserService {
         userRepository.deleteByNickname(username);
     }
 
+    public void deleteUserIfExists(String username) {
+        if (userRepository.existsByNickname(username)) {
+            userRepository.deleteByNickname(username);
+        }
+    }
+
 
     private UserEntity getUserOrThrow(String nickname) {
         return userRepository.findByNickname(nickname).orElseThrow(UserDoesNotExistException::new);

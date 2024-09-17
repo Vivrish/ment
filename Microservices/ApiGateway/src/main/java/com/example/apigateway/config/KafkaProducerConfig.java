@@ -1,4 +1,4 @@
-package com.example.usermanagementservice.kafka;
+package com.example.apigateway.config;
 
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.APIGateway.FullUserDto;
@@ -17,13 +17,13 @@ import java.util.Map;
 @Configuration
 public class KafkaProducerConfig {
     @Bean
-    public ProducerFactory<String, FullUserDto> producerFactoryUser() {
+    public ProducerFactory<String, FullUserDto> producerFactory() {
         return new DefaultKafkaProducerFactory<>(generateConfigProps());
     }
 
     @Bean
-    public KafkaTemplate<String, FullUserDto> kafkaTemplateUser() {
-        return new KafkaTemplate<>(producerFactoryUser());
+    public KafkaTemplate<String, FullUserDto> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
     }
 
     @Bean
@@ -36,11 +36,14 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactoryFailure());
     }
 
-    public Map<String, Object> generateConfigProps() {
+    private Map<String, Object> generateConfigProps() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return configProps;
     }
+
+
+
 }
