@@ -46,9 +46,6 @@ public class AuthenticationService {
 
     public void register(UserCredentialsDto user) throws RoleDoesNotExistException, NameDoesNotExistException {
         log.info("Registering user {}", user.getUsername());
-        if (!authRepository.existsByName(user.getUsername())) {
-            throw new NameDoesNotExistException();
-        }
         User savedUser = new User(user.getUsername(), encoder.encode(user.getPassword()));
         if (authRepository.existsByName(user.getUsername())) {
             throw new NameAlreadyExistsException();
