@@ -1,6 +1,7 @@
 package com.example.chatservice.config;
 
 import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -65,6 +66,30 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FullUserDto> kafkaListenerContainerFactoryUser() {
         ConcurrentKafkaListenerContainerFactory<String, FullUserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryUser());
+        return factory;
+    }
+
+    // Configuration for topics that use FailureDto
+
+    @Bean
+    public ProducerFactory<String, FailureDto> producerFactoryFailure() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, FailureDto> kafkaTemplateFailure() {
+        return new KafkaTemplate<>(producerFactoryFailure());
+    }
+
+    @Bean
+    public ConsumerFactory<String, FailureDto> consumerFactoryFailure() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, FailureDto> kafkaListenerContainerFactoryFailure() {
+        ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryFailure());
         return factory;
     }
 

@@ -94,4 +94,10 @@ class E2ETestsApplicationTests {
         log.debug("Correct login scenario is complete");
     }
 
+    @Test
+    public void gatherAllInformation() {
+        log.debug("Starting gather all information scenario");
+
+    }
+
 }

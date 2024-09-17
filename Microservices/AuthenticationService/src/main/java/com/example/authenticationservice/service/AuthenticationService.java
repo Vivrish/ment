@@ -81,4 +81,11 @@ public class AuthenticationService {
                 .orElseThrow(NameDoesNotExistException::new);
         return converter.userCredentialsDto(user);
     }
+
+    public void deleteUserIfExists(String username) {
+        log.debug("Deleting user: {}", username);
+        if (authRepository.existsByName(username)) {
+            authRepository.deleteByName(username);
+        }
+    }
 }

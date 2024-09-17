@@ -59,4 +59,10 @@ public class UserService {
         user.setSettings(settings);
         return converter.fullUserDetailsDto(userRepository.save(user));
     }
+
+    public void deleteUserIfExists(String username) {
+        if (userRepository.existsByNickname(username)) {
+            userRepository.deleteByNickname(username);
+        }
+    }
 }

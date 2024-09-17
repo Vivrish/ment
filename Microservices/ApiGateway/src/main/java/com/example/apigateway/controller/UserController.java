@@ -17,7 +17,6 @@ public class UserController {
     public FullUserDto getUserByName(@PathVariable String username, @RequestHeader("Authorization") String authHeader ) {
         return userService.getUserByName(username, authHeader);
     }
-
     @PostMapping("")
     public void register(@RequestBody FullUserDto userDto) {
         userService.addUser(userDto);
