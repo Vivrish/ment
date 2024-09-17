@@ -14,7 +14,7 @@ services:
     expose:
       - "9093"
     environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://kafka:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
@@ -31,7 +31,7 @@ services:
       - "POSTGRES_PASSWORD=secret"
       - "POSTGRES_USER=admin"
     ports:
-      - "5432"
+      - "5432:5432"
 
   chats_db:
     image: "postgres:latest"
@@ -54,15 +54,20 @@ services:
       - "5433:5432"
 
   eureka:
+    container_name: "EurekaServer"
     image: ghcr.io/vivrish/eureka:latest
     ports:
       - "8090:8090"
+    volumes:
+      - ./logs/eureka:/app/logs
 
   usermanagementservice:
     container_name: "UserManagementService"
     image: ghcr.io/vivrish/usermanagementservice:latest
     ports:
       - "8060:8060"
+    volumes:
+      - ./logs/usermanagementservice:/app/logs
     depends_on:
       - kafka
       - user_details_db
@@ -72,6 +77,8 @@ services:
     image: ghcr.io/vivrish/chatservice:latest
     ports:
       - "8100:8100"
+    volumes:
+      - ./logs/chatservice:/app/logs
     depends_on:
       - kafka
       - chats_db
@@ -81,6 +88,8 @@ services:
     image: ghcr.io/vivrish/authservice:latest
     ports:
       - "8070:8070"
+    volumes:
+      - ./logs/authservice:/app/logs
     depends_on:
       - kafka
       - credentials_db
@@ -91,6 +100,8 @@ services:
     image: ghcr.io/vivrish/apigateway:latest
     ports:
       - "8080:8080"
+    volumes:
+      - ./logs/apigateway:/app/logs
     depends_on:
       - kafka
       - eureka

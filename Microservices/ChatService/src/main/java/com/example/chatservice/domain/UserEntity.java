@@ -1,6 +1,7 @@
 package com.example.chatservice.domain;
 
-import com.example.chatservice.DTO.ShortUserDto;
+
+import com.xent.DTO.ChatService.ShortChatUserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,11 +26,11 @@ public class UserEntity {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<MessageEntity> messages = new ArrayList<>();
 
-    public UserEntity(ShortUserDto shortUserDto) {
+    public UserEntity(ShortChatUserDto shortUserDto) {
         this.nickname = shortUserDto.getUsername();
     }
 
-    public void setFields(ShortUserDto userToEdit) {
+    public void setFields(ShortChatUserDto userToEdit) {
         this.nickname = userToEdit.getUsername();
     }
 }

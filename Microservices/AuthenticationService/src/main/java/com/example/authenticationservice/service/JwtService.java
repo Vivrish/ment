@@ -2,6 +2,7 @@ package com.example.authenticationservice.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.*;
 import java.util.function.Function;
 
 @Service
+@Slf4j
 public class JwtService {
     private final String algorithm = "HmacSHA256";
     private final KeyGenerator keyGenerator;
@@ -46,12 +48,17 @@ public class JwtService {
     }
 
     public boolean validateHeader(String header) {
+        log.debug("Validating header: {}", header);
         if (header == null || !header.startsWith("Bearer ")) {
+            log.debug("Header is not valid: {}", header);
             return false;
         }
         String jwtToken = header.substring(7);
         String username = extractUsername(jwtToken);
-        if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+        log.debug("JWT token extracted: ({})", jwtToken);
+        log.debug("Username extracted: {}", username);
+        if (username == null) {
+            log.debug("Header is not valid: {}", header);
             return false;
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -59,7 +66,10 @@ public class JwtService {
     }
 
     public boolean validateToken(String jwtToken, UserDetails userDetails) {
+        log.debug("Validating token: {}", jwtToken);
         String username = extractUsername(jwtToken);
+        log.debug("JWT claim username: {} actual: {}", username, userDetails.getUsername());
+        log.debug("Token is expired: {}", isTokenExpired(jwtToken));
         return Objects.equals(username, userDetails.getUsername()) && !isTokenExpired(jwtToken);
     }
 

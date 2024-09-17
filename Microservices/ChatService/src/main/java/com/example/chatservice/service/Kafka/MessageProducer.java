@@ -1,6 +1,5 @@
 package com.example.chatservice.service.Kafka;
 
-import com.example.chatservice.DTO.ShortMessageDto;
 import com.example.chatservice.domain.RoomEntity;
 import com.example.chatservice.domain.UserEntity;
 import com.example.chatservice.exception.RoomDoesNotExistException;
@@ -8,6 +7,7 @@ import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.exception.UserIsNotAMemberException;
 import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.UserRepository;
+import com.xent.DTO.ChatService.ShortMessageDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

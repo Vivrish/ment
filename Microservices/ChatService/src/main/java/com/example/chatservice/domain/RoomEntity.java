@@ -1,6 +1,6 @@
 package com.example.chatservice.domain;
 
-import com.example.chatservice.DTO.ShortRoomDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

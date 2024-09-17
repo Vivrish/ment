@@ -1,8 +1,8 @@
 package com.example.chatservice.controller;
 
-import com.example.chatservice.DTO.FullUserDto;
-import com.example.chatservice.DTO.ShortUserDto;
 import com.example.chatservice.service.UserService;
+import com.xent.DTO.ChatService.FullChatUserDto;
+import com.xent.DTO.ChatService.ShortChatUserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +13,17 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{username}")
-    FullUserDto getByUsername(@PathVariable String username) {
+    FullChatUserDto getByUsername(@PathVariable String username) {
         return userService.getUserByNickname(username);
     }
 
     @PostMapping("")
-    FullUserDto createUser(@RequestBody ShortUserDto shortUserDto) {
+    FullChatUserDto createUser(@RequestBody ShortChatUserDto shortUserDto) {
         return userService.addUser(shortUserDto);
     }
 
     @PutMapping("/{username}")
-    FullUserDto editUser(@RequestBody ShortUserDto shortUserDto, @PathVariable String username) {
+    FullChatUserDto editUser(@RequestBody ShortChatUserDto shortUserDto, @PathVariable String username) {
         return userService.editUser(username, shortUserDto);
     }
     @DeleteMapping("/{username}")

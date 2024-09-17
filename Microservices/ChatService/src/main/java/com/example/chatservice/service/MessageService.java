@@ -1,7 +1,6 @@
 package com.example.chatservice.service;
 
-import com.example.chatservice.DTO.FullMessageDto;
-import com.example.chatservice.DTO.ShortMessageDto;
+import com.example.chatservice.DTO.Converter;
 import com.example.chatservice.domain.MessageEntity;
 import com.example.chatservice.domain.RoomEntity;
 import com.example.chatservice.domain.UserEntity;
@@ -11,6 +10,8 @@ import com.example.chatservice.exception.UserDoesNotExistException;
 import com.example.chatservice.repository.MessageRepository;
 import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.UserRepository;
+import com.xent.DTO.ChatService.FullMessageDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class MessageService {
     private final MessageRepository messageRepository;
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
+    private final Converter converter;
 
     public FullMessageDto addMessage(ShortMessageDto shortMessageDto) {
         UserEntity sender = userRepository.findByNickname(shortMessageDto.getSenderName())
@@ -39,13 +41,13 @@ public class MessageService {
         messageEntity.setRoom(roomEntity);
         messageEntity.setSender(sender);
         log.debug("Message saved: {}", shortMessageDto.getMessage());
-        return new FullMessageDto(messageRepository.save(messageEntity));
+        return converter.fullMessageDto(messageRepository.save(messageEntity));
     }
 
     public FullMessageDto editMessage(Long id, ShortMessageDto shortMessageDto) {
         MessageEntity messageEntity = getMessageOrThrow(id);
         messageEntity.setFields(shortMessageDto);
-        return new FullMessageDto(messageRepository.save(messageEntity));
+        return converter.fullMessageDto(messageRepository.save(messageEntity));
     }
 
     public void deleteMessage(Long id) {
@@ -57,7 +59,7 @@ public class MessageService {
 
     public FullMessageDto getMessage(Long id) {
         MessageEntity messageEntity = getMessageOrThrow(id);
-        return new FullMessageDto(messageEntity);
+        return converter.fullMessageDto(messageEntity);
     }
 
     private MessageEntity getMessageOrThrow(Long id) {
@@ -67,7 +69,7 @@ public class MessageService {
     public Collection<FullMessageDto> getAll() {
         Collection<FullMessageDto> messages = new ArrayList<>();
         for (MessageEntity messageEntity: messageRepository.findAll()) {
-            messages.add(new FullMessageDto(messageEntity));
+            messages.add(converter.fullMessageDto(messageEntity));
         }
         return messages;
     }

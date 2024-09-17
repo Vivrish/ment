@@ -1,18 +1,17 @@
 package com.example.chatservice.controller;
 
 
-import com.example.chatservice.DTO.FullTopicDto;
-import com.example.chatservice.DTO.ShortMessageDto;
 import com.example.chatservice.service.Kafka.MessageProducer;
 
 import com.example.chatservice.service.Kafka.TopicService;
+import com.xent.DTO.ChatService.FullTopicDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
 import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,10 +1,9 @@
 package com.example.apigateway.controller;
 
 
-
-import com.example.apigateway.DTO.FullUserCredentialsDto;
-import com.example.apigateway.DTO.FullUserDto;
 import com.example.apigateway.service.UserService;
+import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class UserController {
         userService.addUser(userDto);
     }
     @PostMapping("/login")
-    public String login(@RequestBody FullUserCredentialsDto credentials) {
+    public String login(@RequestBody UserCredentialsDto credentials) {
         return userService.login(credentials);
     }
 

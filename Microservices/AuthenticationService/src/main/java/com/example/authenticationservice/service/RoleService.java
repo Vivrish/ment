@@ -1,8 +1,8 @@
 package com.example.authenticationservice.service;
 
-import com.example.authenticationservice.DTO.RoleDto;
 import com.example.authenticationservice.domain.Role;
 import com.example.authenticationservice.repository.RoleRepository;
+import com.xent.DTO.AuthenticationService.RoleDto;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;

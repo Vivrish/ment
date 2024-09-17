@@ -1,7 +1,6 @@
 package com.example.authenticationservice.service;
 
-import com.example.authenticationservice.DTO.RoleDto;
-import com.example.authenticationservice.DTO.UserCredentialsDto;
+import com.example.authenticationservice.DTO.Converter;
 import com.example.authenticationservice.domain.Role;
 import com.example.authenticationservice.domain.User;
 import com.example.authenticationservice.exception.IncorrectCredentialsException;
@@ -10,6 +9,8 @@ import com.example.authenticationservice.exception.NameDoesNotExistException;
 import com.example.authenticationservice.exception.RoleDoesNotExistException;
 import com.example.authenticationservice.repository.AuthRepository;
 import com.example.authenticationservice.repository.RoleRepository;
+import com.xent.DTO.AuthenticationService.RoleDto;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,21 +32,22 @@ public class AuthenticationService {
     private final BCryptPasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final Converter converter;
 
 
     public List<UserCredentialsDto> getAllUsers() {
         List<UserCredentialsDto> userCredentialsDtos = new ArrayList<>();
         for (User user: authRepository.findAll()) {
-            userCredentialsDtos.add(user.toUserCredentialsDto());
+            userCredentialsDtos.add(converter.userCredentialsDto(user));
         }
         log.info("Getting all users");
         return userCredentialsDtos;
     }
 
     public void register(UserCredentialsDto user) throws RoleDoesNotExistException {
-        log.info("Registering user {}", user.getNickname());
-        User savedUser = new User(user.getNickname(), encoder.encode(user.getPassword()));
-        if (authRepository.existsByName(user.getNickname())) {
+        log.info("Registering user {}", user.getUsername());
+        User savedUser = new User(user.getUsername(), encoder.encode(user.getPassword()));
+        if (authRepository.existsByName(user.getUsername())) {
             throw new NameAlreadyExistsException();
         }
         for (RoleDto roleDto: user.getRoles()) {
@@ -57,25 +59,26 @@ public class AuthenticationService {
             savedUser.addRole(role);
         }
         authRepository.save(savedUser);
-        log.info("Registered user {}", user.getNickname());
+        log.info("Registered user {}", user.getUsername());
     }
 
     public String login(UserCredentialsDto user) throws IncorrectCredentialsException {
-        log.info("Login attempt by {}", user.getNickname());
+        log.info("Login attempt by {}", user.getUsername());
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getNickname(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (!authentication.isAuthenticated()) {
-            log.error("Bad credentials for user {}", user.getNickname());
+            log.error("Bad credentials for user {}", user.getUsername());
             throw new IncorrectCredentialsException();
         }
-        log.info("User {} is logged in", user.getNickname());
-        return jwtService.generateToken(user.getNickname());
+        log.info("User {} is logged in", user.getUsername());
+        return jwtService.generateToken(user.getUsername());
     }
 
 
     public UserCredentialsDto getUserByName(String username) {
         log.info("Getting user credentials of {}", username);
-        return new UserCredentialsDto(authRepository.findUserByName(username)
-                .orElseThrow(NameDoesNotExistException::new));
+        User user = authRepository.findUserByName(username)
+                .orElseThrow(NameDoesNotExistException::new);
+        return converter.userCredentialsDto(user);
     }
 }
