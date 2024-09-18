@@ -14,9 +14,27 @@ public class KafkaTopicConfig {
                 .replicas(1)
                 .build();
     }
+
     @Bean
-    NewTopic registerStatus() {
+    NewTopic registerFailure() {
         return TopicBuilder.name("register-failure")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+    @Bean
+    NewTopic createRoom() {
+        return TopicBuilder.name("create-room")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
+
+
+    @Bean
+    NewTopic sendMessageHttp() {
+        return TopicBuilder.name("send-message-http")
                 .partitions(1)
                 .replicas(1)
                 .build();

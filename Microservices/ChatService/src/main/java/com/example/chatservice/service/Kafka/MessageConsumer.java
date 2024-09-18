@@ -1,11 +1,13 @@
 package com.example.chatservice.service.Kafka;
 
 import com.example.chatservice.service.MessageService;
+import com.example.chatservice.service.RoomService;
 import com.example.chatservice.service.UserService;
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortChatUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,7 +23,9 @@ public class MessageConsumer {
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageService messageService;
     private final UserService userService;
+    private final RoomService roomService;
     private final KafkaTemplate<String, FailureDto> failureTemplate;
+
 
 
     @KafkaListener(topicPattern = "topic-room-.*", groupId = "main", containerFactory = "kafkaListenerContainerFactoryMessage")
@@ -52,6 +56,19 @@ public class MessageConsumer {
         userService.deleteUserIfExists(username);
     }
 
+
+
+    @KafkaListener(topics = "create-room", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryNewRoom")
+    public void createRoom(ShortRoomDto room) {
+        log.info("Creating new room: {}", room);
+        roomService.createRoom(room);
+    }
+
+    @KafkaListener(topicPattern = "send-message-http", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryMessage")
+    public void sendMessageHttp(ShortMessageDto message) {
+        log.info("Adding new message via HTTP");
+        messageService.addMessage(message);
+    }
 
 
 

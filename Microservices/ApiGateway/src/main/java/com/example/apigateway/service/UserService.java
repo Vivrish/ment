@@ -22,23 +22,19 @@ import org.springframework.web.server.ResponseStatusException;
 @AllArgsConstructor
 @Slf4j
 public class UserService {
+    private final AuthService authService;
     private final AuthenticationService authenticationService;
     private final UserManagementService userManagementService;
     private final ChatService chatService;
     private final KafkaTemplate<String, FullUserDto> kafkaTemplate;
+
 
     public void addUser(@NonNull FullUserDto userDto) {
         log.debug("Adding user to the register topic: {}", userDto);
         kafkaTemplate.send("register", userDto);
     }
 
-    public String login(@NonNull UserCredentialsDto credentials) {
-        log.debug("Trying to log in user: {}", credentials);
-        return authenticationService.login(credentials);
-    }
-
-    public FullUserDto getUserByName(String username, String authHeader) {
-        authenticate(authHeader);
+    public FullUserDto getUserByName(String username) {
         FullUserDto userDto = new FullUserDto();
         log.info("Getting full user information for {}", username);
         UserCredentialsDto credentialsDto = authenticationService.getUserByName(username);
@@ -51,10 +47,5 @@ public class UserService {
         return userDto;
     }
 
-    private void authenticate(String authHeader) {
-        log.info("Authorizing header: {}", authHeader);
-        if (!authenticationService.authenticate(authHeader)) {
-            throw new ResponseStatusException(HttpStatusCode.valueOf(401));
-        }
-    }
+
 }

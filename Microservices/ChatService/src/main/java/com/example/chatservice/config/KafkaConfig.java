@@ -3,6 +3,7 @@ package com.example.chatservice.config;
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -90,6 +91,19 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FailureDto> kafkaListenerContainerFactoryFailure() {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryFailure());
+        return factory;
+    }
+
+    // Configuration for topics that use ShortRoomDto
+    @Bean
+    public ConsumerFactory<String, ShortRoomDto> consumerFactoryNewRoom() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortRoomDto> kafkaListenerContainerFactoryNewRoom() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortRoomDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryNewRoom());
         return factory;
     }
 
