@@ -71,7 +71,6 @@ public class FullUserDto {
         List<RoleDto> otherSortedRoles = new ArrayList<>(other.getRoles());
         otherSortedRoles.sort(Comparator.comparing(RoleDto::getName));
 
-
         return Objects.equals(this.username, other.getUsername())
                 && Objects.equals(this.firstName, other.getFirstName())
                 && Objects.equals(this.lastName, other.getLastName())

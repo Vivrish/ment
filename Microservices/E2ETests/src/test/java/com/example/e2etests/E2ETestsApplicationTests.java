@@ -5,7 +5,6 @@ import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.ValidatableResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,10 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 
-import java.util.List;
-import java.util.Map;
+
+import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.*;
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -41,7 +41,7 @@ class E2ETestsApplicationTests {
     }
 
     @Test
-    public void incorrectLogin() {
+    public void incorrectLogin() throws InterruptedException {
         log.debug("Starting incorrect login scenario");
         FullUserDto userToRegister = new FullUserDto("bob", "password", "bobby", "bones", "pirate");
         UserCredentialsDto incorrectCredentials = new UserCredentialsDto(userToRegister);
@@ -54,6 +54,7 @@ class E2ETestsApplicationTests {
                 .then()
                 .statusCode(202);
         log.debug("User {} is registered successfully", userToRegister);
+        Thread.sleep(10000); // Wait until server processes the registration
         given()
                 .when()
                 .contentType("application/json")
@@ -70,7 +71,7 @@ class E2ETestsApplicationTests {
         FullUserDto userToRegister = new FullUserDto("bil", "password", "billy", "bones", "pirate");
         UserCredentialsDto userToRegisterCredentials = new UserCredentialsDto(userToRegister);
         registerUser(userToRegister);
-
+        pollUser(userToRegisterCredentials);
         log.debug("User {} is registered successfully", userToRegister);
 
         String authHeader = loginUser(userToRegisterCredentials);
@@ -81,13 +82,14 @@ class E2ETestsApplicationTests {
     }
 
     @Test
-    public void partialFailure() {
+    public void partialFailure() throws InterruptedException {
         log.debug("Starting partial failure scenario");
         FullUserDto userToRegister = new FullUserDto("ant", "pwd", null, "Banderas", "actor");
         UserCredentialsDto userToRegisterCredentials = new UserCredentialsDto(userToRegister);
         log.debug("Trying to register a user with null first name: {}", userToRegister);
         registerUser(userToRegister);
         log.debug("Server has accepted the request with null first name");
+        Thread.sleep(10000);
         given()
                 .when()
                 .contentType("application/json")
@@ -100,7 +102,7 @@ class E2ETestsApplicationTests {
 
 
     @Test
-    public void messagingInOneRoom() {
+    public void messagingInOneRoom() throws InterruptedException {
         log.debug("Starting messagingInOneRoom scenario");
         FullUserDto carl = new FullUserDto("carl", "pwd", "Carl", "Coral", "Animal");
         FullUserDto clara = new FullUserDto("clara", "pwd", "Clara", "Clarinet", "Music");
@@ -111,14 +113,20 @@ class E2ETestsApplicationTests {
         registerUser(carl);
         registerUser(clara);
 
+        pollUser(new UserCredentialsDto(carl));
+        pollUser(new UserCredentialsDto(clara));
+
         String claraToken = loginUser(new UserCredentialsDto(clara));
         String carlToken = loginUser(new UserCredentialsDto(carl));
 
         makeRoom(room, carlToken);
 
+        Thread.sleep(10000);   // Wait until server creates the room
+
         sendMessage(carlMessage, carlToken);
         sendMessage(claraMessage, claraToken);
 
+        Thread.sleep(10000);   // Wait until server sends the messages
 
         ValidatableResponse serverSideCarl = getUser(carl.getUsername(), carlToken);
         ValidatableResponse serverSideClara = getUser(clara.getUsername(), claraToken);
@@ -126,8 +134,10 @@ class E2ETestsApplicationTests {
         FullUserDto serverSideMappedCarl = serverSideCarl.extract().as(FullUserDto.class);
         FullUserDto serverSideMappedClara = serverSideClara.extract().as(FullUserDto.class);
 
-        assertEquals(serverSideMappedCarl, carl);
-        assertEquals(serverSideMappedClara, clara);
+        assertTrue(serverSideMappedCarl.isEquivalent(carl));
+        assertTrue(serverSideMappedClara.isEquivalent(clara));
+
+        log.debug("messagingInOneRoom scenario is complete");
     }
 
     private String loginUser(UserCredentialsDto userToRegisterCredentials) {
@@ -180,6 +190,23 @@ class E2ETestsApplicationTests {
                 .get("/users/%s".formatted(username))
                 .then()
                 .statusCode(200);
+    }
+
+    private boolean isUserRegistered(UserCredentialsDto userCredentialsDto) {
+        try {
+            loginUser(userCredentialsDto);
+            log.debug("Successfully polled a user {}", userCredentialsDto.getUsername());
+            return true;
+        }
+        catch (Exception e) {
+            log.debug("Unable to get a user {} from server during a poll", userCredentialsDto.getUsername());
+            return false;
+        }
+    }
+
+    private void pollUser(UserCredentialsDto userToPoll) {
+        log.debug("Polling user {}", userToPoll);
+        await().atMost(10, TimeUnit.SECONDS).pollInterval(1, TimeUnit.SECONDS).until(() -> isUserRegistered(userToPoll));
     }
 
 }
