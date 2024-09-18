@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -36,5 +37,18 @@ public class ShortMessageDto {
                 ", roomName='" + roomName + '\'' +
                 ", senderName='" + senderName + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShortMessageDto that = (ShortMessageDto) o;
+        return Objects.equals(message, that.message) && Objects.equals(roomName, that.roomName) && Objects.equals(senderName, that.senderName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(message, roomName, senderName);
     }
 }
