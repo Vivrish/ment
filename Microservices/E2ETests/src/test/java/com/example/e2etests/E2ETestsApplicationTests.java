@@ -133,7 +133,7 @@ class E2ETestsApplicationTests {
 
         FullUserDto serverSideMappedCarl = serverSideCarl.extract().as(FullUserDto.class);
         FullUserDto serverSideMappedClara = serverSideClara.extract().as(FullUserDto.class);
-
+        log.debug("Mapped carl and clara: {} {}", serverSideCarl, serverSideClara);
         assertTrue(serverSideMappedCarl.isEquivalent(carl));
         assertTrue(serverSideMappedClara.isEquivalent(clara));
 
