@@ -39,7 +39,7 @@ public class MessageConsumer {
         log.debug("Message consumed: {}", message.getMessage());
     }
 
-    @KafkaListener(topics = "register", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryUser")
+    @KafkaListener(topics = "register", groupId = "chatServiceRegister", containerFactory = "kafkaListenerContainerFactoryUser")
     public void consumeRegister(FullUserDto fullUserToRegister) {
         log.debug("Consumed message on topic register: {}", fullUserToRegister);
         try {
@@ -57,7 +57,7 @@ public class MessageConsumer {
         }
     }
 
-    @KafkaListener(topics = "register", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "chatServiceRegisterFallback", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollBackRegister(FailureDto failure) {
         log.info("Rolling back the registration: {}", failure);
         String username = failure.getRollbackIdentification();
@@ -66,13 +66,13 @@ public class MessageConsumer {
 
 
 
-    @KafkaListener(topics = "create-room", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryNewRoom")
+    @KafkaListener(topics = "create-room", groupId = "chatServiceCreateRoom", containerFactory = "kafkaListenerContainerFactoryNewRoom")
     public void createRoom(ShortRoomDto room) {
         log.info("Creating new room: {}", room);
         roomService.createRoom(room);
     }
 
-    @KafkaListener(topicPattern = "send-message-http", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryMessage")
+    @KafkaListener(topicPattern = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void sendMessageHttp(ShortMessageDto message) {
         log.info("Adding new message via HTTP");
         messageService.addMessage(message);

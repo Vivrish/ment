@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class KafkaListeners {
     private final UserService userService;
     private final KafkaTemplate<String, FailureDto> failureTemplate;
-    @KafkaListener(topics = "register", groupId = "userManagementService", containerFactory = "kafkaListenerContainerFactoryUser")
+    @KafkaListener(topics = "register", groupId = "userManagementServiceRegister", containerFactory = "kafkaListenerContainerFactoryUser")
     public void register(FullUserDto fullUserToRegister) {
         log.debug("Registering user: {}", fullUserToRegister);
         try {
@@ -38,7 +38,7 @@ public class KafkaListeners {
 
     }
 
-    @KafkaListener(topics = "register", groupId = "userManagementService", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "userManagementServiceRegisterFallback", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollback(FailureDto failure) {
         log.info("Rolling back register: {}", failure);
         String username = failure.getRollbackIdentification();
