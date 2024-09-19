@@ -1,6 +1,7 @@
 package com.example.apigateway.config;
 
 import com.xent.DTO.APIGateway.FailureDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -35,6 +36,10 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FailureDto> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
+        factory.setRecordFilterStrategy(record -> {
+            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            return !KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType().equals(messageTypeHeader);
+        });
         return factory;
     }
 }

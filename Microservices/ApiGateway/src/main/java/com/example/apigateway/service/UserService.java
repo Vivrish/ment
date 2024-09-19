@@ -7,22 +7,21 @@ import com.example.apigateway.feignClients.UserManagementService;
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import com.xent.DTO.ChatService.FullChatUserDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import com.xent.DTO.UserManagementService.FullUserDetailsDto;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
 
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class UserService {
-    private final AuthService authService;
     private final AuthenticationService authenticationService;
     private final UserManagementService userManagementService;
     private final ChatService chatService;
@@ -31,7 +30,13 @@ public class UserService {
 
     public void addUser(@NonNull FullUserDto userDto) {
         log.debug("Adding user to the register topic: {}", userDto);
-        kafkaTemplate.send("register", userDto);
+        kafkaTemplate.send(
+                MessageBuilder
+                        .withPayload(userDto)
+                        .setHeader(KafkaHeaders.TOPIC, "register")
+                        .setHeader(KafkaHeaders.KEY, userDto.getUsername())
+                        .setHeader("messageType", KafkaMessageType.USER_REGISTRATION.getMessageType())
+                        .build());
     }
 
     public FullUserDto getUserByName(String username) {

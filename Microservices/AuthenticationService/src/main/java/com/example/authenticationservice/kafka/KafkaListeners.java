@@ -4,10 +4,13 @@ import com.example.authenticationservice.service.AuthenticationService;
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.AuthenticationService.UserCredentialsDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,10 +29,15 @@ public class KafkaListeners {
         catch (Exception e) {
             FailureDto failure = new FailureDto("AuthService", e.toString(), fullUserDto.getUsername());
             log.error("Error while registering user. Initiating failure procedure: {}", fullUserDto);
-            failureTemplate.send("register-failure", failure);
+            failureTemplate.send(MessageBuilder
+                    .withPayload(failure)
+                    .setHeader(KafkaHeaders.TOPIC, "register")
+                    .setHeader(KafkaHeaders.KEY, fullUserDto.getUsername())
+                    .setHeader("messageType", KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType())
+                    .build());
         }
     }
-    @KafkaListener(topics = "register-failure", groupId = "authenticationService", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "authenticationService", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollBackRegister(FailureDto failure) {
         log.info("Rolling back register: {}", failure);
         String username = failure.getRollbackIdentification();

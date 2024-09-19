@@ -4,6 +4,7 @@ import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -67,6 +68,10 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FullUserDto> kafkaListenerContainerFactoryUser() {
         ConcurrentKafkaListenerContainerFactory<String, FullUserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryUser());
+        factory.setRecordFilterStrategy(record -> {
+            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            return !KafkaMessageType.USER_REGISTRATION.getMessageType().equals(messageTypeHeader);
+        });
         return factory;
     }
 
@@ -91,6 +96,10 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FailureDto> kafkaListenerContainerFactoryFailure() {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryFailure());
+        factory.setRecordFilterStrategy(record -> {
+            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            return !KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType().equals(messageTypeHeader);
+        });
         return factory;
     }
 

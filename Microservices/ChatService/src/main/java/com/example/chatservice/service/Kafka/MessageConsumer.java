@@ -8,11 +8,14 @@ import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortChatUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 
@@ -45,11 +48,16 @@ public class MessageConsumer {
         catch (Exception e) {
             FailureDto failure = new FailureDto("ChatService", e.toString(), fullUserToRegister.getUsername());
             log.error("Error while registering user. Initiating failure procedure: {}", fullUserToRegister);
-            failureTemplate.send("register-failure", failure);
+            failureTemplate.send(MessageBuilder
+                    .withPayload(failure)
+                    .setHeader(KafkaHeaders.TOPIC, "register")
+                    .setHeader(KafkaHeaders.KEY, fullUserToRegister.getUsername())
+                    .setHeader("messageType", KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType())
+                    .build());
         }
     }
 
-    @KafkaListener(topics = "register-failure", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "chatService", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollBackRegister(FailureDto failure) {
         log.info("Rolling back the registration: {}", failure);
         String username = failure.getRollbackIdentification();
