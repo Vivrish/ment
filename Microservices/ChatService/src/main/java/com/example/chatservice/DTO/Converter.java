@@ -66,8 +66,12 @@ public class Converter {
     }
 
     public ShortTopicDto shortTopicDto(TopicEntity topicEntity) {
-        FullTopicDto fullTopicDto = fullTopicDto(topicEntity);
-        return new ShortTopicDto(fullTopicDto);
+        ShortTopicDto shortTopicDto = new ShortTopicDto();
+        shortTopicDto.setName(topicEntity.getTopicName());
+        if (topicEntity.getRoom() != null) {
+            shortTopicDto.setRoomName(topicEntity.getRoom().getName());
+        }
+        return shortTopicDto;
     }
 
     public ShortMessageDto shortMessageDto(MessageEntity messageEntity) {

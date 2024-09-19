@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FullTopicDto {
     private String name;
-    private ShortRoomDto room;
+    private ShortRoomDto room = null;
 
 
 }
