@@ -69,7 +69,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, FullUserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryUser());
         factory.setRecordFilterStrategy(record -> {
-            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            String messageTypeHeader = new String(record.headers().lastHeader("messageType").value());
             return !KafkaMessageType.USER_REGISTRATION.getMessageType().equals(messageTypeHeader);
         });
         return factory;
@@ -97,7 +97,7 @@ public class KafkaConfig {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryFailure());
         factory.setRecordFilterStrategy(record -> {
-            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            String messageTypeHeader = new String(record.headers().lastHeader("messageType").value());
             return !KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType().equals(messageTypeHeader);
         });
         return factory;

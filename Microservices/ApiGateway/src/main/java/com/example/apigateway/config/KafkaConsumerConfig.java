@@ -37,7 +37,7 @@ public class KafkaConsumerConfig {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory());
         factory.setRecordFilterStrategy(record -> {
-            String messageTypeHeader = new String(record.headers().lastHeader("message-type").value());
+            String messageTypeHeader = new String(record.headers().lastHeader("messageType").value());
             return !KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType().equals(messageTypeHeader);
         });
         return factory;

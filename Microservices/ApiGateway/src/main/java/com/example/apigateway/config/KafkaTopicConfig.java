@@ -15,13 +15,6 @@ public class KafkaTopicConfig {
                 .build();
     }
 
-    @Bean
-    NewTopic registerFailure() {
-        return TopicBuilder.name("register-failure")
-                .partitions(1)
-                .replicas(1)
-                .build();
-    }
 
     @Bean
     NewTopic createRoom() {
