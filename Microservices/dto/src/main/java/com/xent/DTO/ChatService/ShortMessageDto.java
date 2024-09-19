@@ -17,6 +17,8 @@ public class ShortMessageDto {
     private String roomName;
     private String senderName;
 
+
+
     public ShortMessageDto(FullMessageDto fullMessageDto) {
         this.message = fullMessageDto.getMessage();
         this.timeStamp = fullMessageDto.getTimeStamp();
@@ -26,6 +28,12 @@ public class ShortMessageDto {
         if (fullMessageDto.getSender() != null) {
             this.senderName = fullMessageDto.getSender().getUsername();
         }
+    }
+
+    public ShortMessageDto(String message, String roomName, String senderName) {
+        this.message = message;
+        this.roomName = roomName;
+        this.senderName = senderName;
     }
 
 

@@ -106,9 +106,9 @@ class E2ETestsApplicationTests {
         log.debug("Starting messagingInOneRoom scenario");
         FullUserDto carl = new FullUserDto("carl", "pwd", "Carl", "Coral", "Animal");
         FullUserDto clara = new FullUserDto("clara", "pwd", "Clara", "Clarinet", "Music");
-        ShortRoomDto room = new ShortRoomDto("carlAndClara", null, null, null, null);
-        ShortMessageDto carlMessage = new ShortMessageDto("Hey Clara", null, "carlAndClara", "carl");
-        ShortMessageDto claraMessage = new ShortMessageDto("Hey Carl", null, "carlAndClara", "clara");
+        ShortRoomDto room = new ShortRoomDto("carlAndClara");
+        ShortMessageDto carlMessage = new ShortMessageDto("Hey Clara", "carlAndClara", "carl");
+        ShortMessageDto claraMessage = new ShortMessageDto("Hey Carl", "carlAndClara", "clara");
 
         registerUser(carl);
         registerUser(clara);

@@ -19,6 +19,10 @@ public class ShortRoomDto {
     private Collection<String> messages = new ArrayList<>();
     private Collection<String> connectedMemberNames = new ArrayList<>();
 
+    public ShortRoomDto(String name) {
+        this.name = name;
+    }
+
 
     public ShortRoomDto(FullRoomDto fullRoomDto) {
         this.name = fullRoomDto.getName();
