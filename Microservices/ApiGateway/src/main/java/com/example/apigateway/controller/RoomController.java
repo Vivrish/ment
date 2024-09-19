@@ -26,5 +26,12 @@ public class RoomController {
         roomService.makeRoom(room);
         return ResponseEntity.accepted().build();
     }
+    @PostMapping("/{roomName}/{username}")
+    public ResponseEntity<Void> addUserToRoom(@PathVariable String roomName, @PathVariable String username,  @RequestHeader("Authorization") String auth) {
+        log.debug("Request accepted: add user {} to room {}", username, roomName);
+        authService.authenticate(auth);
+        roomService.addUserToRoom(roomName, username);
+        return ResponseEntity.accepted().build();
+    }
 
 }

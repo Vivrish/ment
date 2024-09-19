@@ -32,4 +32,13 @@ public class KafkaTopicConfig {
                 .replicas(1)
                 .build();
     }
+
+
+    @Bean
+    NewTopic addUserToRoom() {
+        return TopicBuilder.name("add-user-to-room")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
 }

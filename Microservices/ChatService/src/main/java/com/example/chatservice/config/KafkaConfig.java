@@ -2,6 +2,7 @@ package com.example.chatservice.config;
 
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
+import com.xent.DTO.APIGateway.ShortUserAndRoomDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
 import com.xent.DTO.Constants.KafkaMessageType;
@@ -116,6 +117,18 @@ public class KafkaConfig {
         return factory;
     }
 
+    // Configuration for topics that use ShortUserAndRoomDto
+    @Bean
+    public ConsumerFactory<String, ShortUserAndRoomDto> consumerFactoryAddUserToRoom() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortUserAndRoomDto> kafkaListenerContainerFactoryAddUserToRoom() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortUserAndRoomDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryAddUserToRoom());
+        return factory;
+    }
     // Shared props
 
     private Map<String, Object> generateProps() {

@@ -123,6 +123,11 @@ class E2ETestsApplicationTests {
 
         Thread.sleep(10000);   // Wait until server creates the room
 
+        addUserToRoom(clara.getUsername(), room.getName(), claraToken);
+        addUserToRoom(carl.getUsername(), room.getName(), carlToken);
+
+        Thread.sleep(10000);   // Wait until server adds users to the room
+
         sendMessage(carlMessage, carlToken);
         sendMessage(claraMessage, claraToken);
 
@@ -201,6 +206,14 @@ class E2ETestsApplicationTests {
                 .get("/users/%s".formatted(username))
                 .then()
                 .statusCode(200);
+    }
+
+    private void addUserToRoom(String username, String roomName, String auth) {
+        given()
+                .header("Authorization", auth)
+                .post("/rooms/%s/%s".formatted(roomName, username))
+                .then()
+                .statusCode(202);
     }
 
     private boolean isUserRegistered(UserCredentialsDto userCredentialsDto) {

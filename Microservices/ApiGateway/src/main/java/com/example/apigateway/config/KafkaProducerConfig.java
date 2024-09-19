@@ -2,6 +2,7 @@ package com.example.apigateway.config;
 
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.APIGateway.ShortUserAndRoomDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -56,6 +57,16 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, ShortMessageDto> kafkaTemplateMessageHttp() {
         return new KafkaTemplate<>(producerFactoryMessageHttp());
+    }
+
+    @Bean
+    public ProducerFactory<String, ShortUserAndRoomDto> producerFactoryAddUserToRoom() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ShortUserAndRoomDto> kafkaTemplateAddUserToRoom() {
+        return new KafkaTemplate<>(producerFactoryAddUserToRoom());
     }
 
     private Map<String, Object> generateConfigProps() {

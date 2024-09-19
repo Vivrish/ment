@@ -4,6 +4,7 @@ import com.example.chatservice.service.MessageService;
 import com.example.chatservice.service.RoomService;
 import com.example.chatservice.service.UserService;
 import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.APIGateway.ShortUserAndRoomDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortChatUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
@@ -72,10 +73,16 @@ public class MessageConsumer {
         roomService.createRoom(room);
     }
 
-    @KafkaListener(topicPattern = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
+    @KafkaListener(topics = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void sendMessageHttp(ShortMessageDto message) {
         log.info("Adding new message via HTTP");
         messageService.addMessage(message);
+    }
+
+    @KafkaListener(topics = "add-user-to-room", groupId = "chatServiceAddUserToRoom", containerFactory = "kafkaListenerContainerFactoryAddUserToRoom")
+    public void addUserToRoom(ShortUserAndRoomDto userAndRoomDto) {
+        log.debug("Adding user {} to room {}", userAndRoomDto.getUsername(), userAndRoomDto.getRoomName());
+        roomService.addMember(userAndRoomDto.getRoomName(), userAndRoomDto.getUsername());
     }
 
 
