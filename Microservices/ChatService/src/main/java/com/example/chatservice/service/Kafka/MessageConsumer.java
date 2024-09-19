@@ -58,7 +58,7 @@ public class MessageConsumer {
         }
     }
 
-    @KafkaListener(topics = "register", groupId = "chatServiceRegisterFallback", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "chatServiceRegister", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollBackRegister(FailureDto failure) {
         log.info("Rolling back the registration: {}", failure);
         String username = failure.getRollbackIdentification();

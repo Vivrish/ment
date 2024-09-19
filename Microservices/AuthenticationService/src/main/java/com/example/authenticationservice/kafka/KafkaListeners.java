@@ -37,7 +37,7 @@ public class KafkaListeners {
                     .build());
         }
     }
-    @KafkaListener(topics = "register", groupId = "authenticationServiceRegisterFallback", containerFactory = "kafkaListenerContainerFactoryFailure")
+    @KafkaListener(topics = "register", groupId = "authenticationServiceRegister", containerFactory = "kafkaListenerContainerFactoryFailure")
     public void rollBackRegister(FailureDto failure) {
         log.info("Rolling back register: {}", failure);
         String username = failure.getRollbackIdentification();
