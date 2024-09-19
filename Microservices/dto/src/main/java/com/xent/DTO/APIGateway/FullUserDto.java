@@ -56,28 +56,10 @@ public class FullUserDto {
     }
 
     public boolean isEquivalent(FullUserDto other) {
-        List<ShortRoomDto> thisSortedRooms = new ArrayList<>(this.rooms);
-        thisSortedRooms.sort(Comparator.comparing(ShortRoomDto::getName));
-        List<ShortRoomDto> otherSortedRooms = new ArrayList<>(other.getRooms());
-        otherSortedRooms.sort(Comparator.comparing(ShortRoomDto::getName));
-
-        List<ShortMessageDto> thisSortedMessages = new ArrayList<>(this.messages);
-        thisSortedMessages.sort(Comparator.comparing(ShortMessageDto::getMessage));
-        List<ShortMessageDto> otherSortedMessages = new ArrayList<>(other.getMessages());
-        otherSortedMessages.sort(Comparator.comparing(ShortMessageDto::getMessage));
-
-        List<RoleDto> thisSortedRoles = new ArrayList<>(this.roles);
-        thisSortedRoles.sort(Comparator.comparing(RoleDto::getName));
-        List<RoleDto> otherSortedRoles = new ArrayList<>(other.getRoles());
-        otherSortedRoles.sort(Comparator.comparing(RoleDto::getName));
-
         return Objects.equals(this.username, other.getUsername())
                 && Objects.equals(this.firstName, other.getFirstName())
                 && Objects.equals(this.lastName, other.getLastName())
-                && Objects.equals(this.description, other.getDescription())
-                && thisSortedMessages.equals(otherSortedMessages)
-                && thisSortedRooms.equals(otherSortedRooms)
-                && thisSortedRoles.equals(otherSortedRoles);
+                && Objects.equals(this.description, other.getDescription());
     }
 
 

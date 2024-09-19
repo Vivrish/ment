@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 
-
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.*;
@@ -136,6 +136,17 @@ class E2ETestsApplicationTests {
         log.debug("Mapped carl and clara: {} {}", serverSideMappedCarl, serverSideMappedClara);
         assertTrue(serverSideMappedCarl.isEquivalent(carl));
         assertTrue(serverSideMappedClara.isEquivalent(clara));
+
+        assertTrue(serverSideMappedCarl.getRooms().contains(room));
+        assertTrue(serverSideMappedClara.getRooms().contains(room));
+
+        assertTrue(serverSideMappedCarl.getMessages().contains(carlMessage));
+        assertTrue(serverSideMappedClara.getMessages().contains(claraMessage));
+
+        Collection<String> serverSideRoomMessages = serverSideMappedCarl.getRooms().iterator().next().getMessages();
+
+        assertTrue(serverSideRoomMessages.contains(claraMessage.getMessage()));
+        assertTrue(serverSideRoomMessages.contains(carlMessage.getMessage()));
 
         log.debug("messagingInOneRoom scenario is complete");
     }
