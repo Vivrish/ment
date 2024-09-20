@@ -19,6 +19,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 
 @Service
 @AllArgsConstructor
@@ -29,6 +33,7 @@ public class MessageConsumer {
     private final UserService userService;
     private final RoomService roomService;
     private final KafkaTemplate<String, FailureDto> failureTemplate;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
 
 
@@ -59,11 +64,10 @@ public class MessageConsumer {
     }
 
     @KafkaListener(topics = "register", groupId = "chatServiceRegisterFailure", containerFactory = "kafkaListenerContainerFactoryFailure")
-    public void rollBackRegister(FailureDto failure) throws InterruptedException {
-        Thread.sleep(5000);
+    public void rollBackRegister(FailureDto failure)  {
         log.info("Rolling back the registration: {}", failure);
         String username = failure.getRollbackIdentification();
-        userService.deleteUserIfExists(username);
+        scheduler.schedule(() -> userService.deleteUserIfExists(username), 5, TimeUnit.SECONDS);
     }
 
 

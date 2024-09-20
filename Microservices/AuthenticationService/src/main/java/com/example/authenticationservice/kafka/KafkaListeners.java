@@ -13,12 +13,17 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @AllArgsConstructor
 @Slf4j
 public class KafkaListeners {
     private final AuthenticationService authenticationService;
     private final KafkaTemplate<String, FailureDto> failureTemplate;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     @KafkaListener(topics = "register", groupId = "authenticationServiceRegister", containerFactory = "kafkaListenerContainerFactoryUser")
     public void register(FullUserDto fullUserDto) {
         try {
@@ -38,10 +43,9 @@ public class KafkaListeners {
         }
     }
     @KafkaListener(topics = "register", groupId = "authenticationServiceRegisterFailure", containerFactory = "kafkaListenerContainerFactoryFailure")
-    public void rollBackRegister(FailureDto failure) throws InterruptedException {
-        Thread.sleep(5000);
+    public void rollBackRegister(FailureDto failure)  {
         log.info("Rolling back register: {}", failure);
         String username = failure.getRollbackIdentification();
-        authenticationService.deleteUserIfExists(username);
+        scheduler.schedule(() -> authenticationService.deleteUserIfExists(username), 5, TimeUnit.SECONDS);
     }
 }
