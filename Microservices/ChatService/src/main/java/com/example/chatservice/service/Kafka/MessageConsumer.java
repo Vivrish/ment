@@ -58,8 +58,9 @@ public class MessageConsumer {
         }
     }
 
-    @KafkaListener(topics = "register", groupId = "chatServiceRegister", containerFactory = "kafkaListenerContainerFactoryFailure")
-    public void rollBackRegister(FailureDto failure) {
+    @KafkaListener(topics = "register", groupId = "chatServiceRegisterFailure", containerFactory = "kafkaListenerContainerFactoryFailure")
+    public void rollBackRegister(FailureDto failure) throws InterruptedException {
+        Thread.sleep(5000);
         log.info("Rolling back the registration: {}", failure);
         String username = failure.getRollbackIdentification();
         userService.deleteUserIfExists(username);

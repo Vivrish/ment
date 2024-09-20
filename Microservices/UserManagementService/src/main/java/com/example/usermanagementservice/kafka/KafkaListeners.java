@@ -38,8 +38,9 @@ public class KafkaListeners {
 
     }
 
-    @KafkaListener(topics = "register", groupId = "userManagementServiceRegister", containerFactory = "kafkaListenerContainerFactoryFailure")
-    public void rollback(FailureDto failure) {
+    @KafkaListener(topics = "register", groupId = "userManagementServiceRegisterFailure", containerFactory = "kafkaListenerContainerFactoryFailure")
+    public void rollback(FailureDto failure) throws InterruptedException {
+        Thread.sleep(5000);
         log.info("Rolling back register: {}", failure);
         String username = failure.getRollbackIdentification();
         userService.deleteUserIfExists(username);
