@@ -2,7 +2,10 @@ package com.example.chatservice.config;
 
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.APIGateway.FailureDto;
+import com.xent.DTO.APIGateway.ShortUserAndRoomDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
+import com.xent.DTO.Constants.KafkaMessageType;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -66,6 +69,10 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FullUserDto> kafkaListenerContainerFactoryUser() {
         ConcurrentKafkaListenerContainerFactory<String, FullUserDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryUser());
+        factory.setRecordFilterStrategy(record -> {
+            String messageTypeHeader = new String(record.headers().lastHeader("messageType").value());
+            return !KafkaMessageType.USER_REGISTRATION.getMessageType().equals(messageTypeHeader);
+        });
         return factory;
     }
 
@@ -90,9 +97,38 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, FailureDto> kafkaListenerContainerFactoryFailure() {
         ConcurrentKafkaListenerContainerFactory<String, FailureDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryFailure());
+        factory.setRecordFilterStrategy(record -> {
+            String messageTypeHeader = new String(record.headers().lastHeader("messageType").value());
+            return !KafkaMessageType.USER_REGISTRATION_FAILURE.getMessageType().equals(messageTypeHeader);
+        });
         return factory;
     }
 
+    // Configuration for topics that use ShortRoomDto
+    @Bean
+    public ConsumerFactory<String, ShortRoomDto> consumerFactoryNewRoom() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortRoomDto> kafkaListenerContainerFactoryNewRoom() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortRoomDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryNewRoom());
+        return factory;
+    }
+
+    // Configuration for topics that use ShortUserAndRoomDto
+    @Bean
+    public ConsumerFactory<String, ShortUserAndRoomDto> consumerFactoryAddUserToRoom() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortUserAndRoomDto> kafkaListenerContainerFactoryAddUserToRoom() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortUserAndRoomDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryAddUserToRoom());
+        return factory;
+    }
     // Shared props
 
     private Map<String, Object> generateProps() {

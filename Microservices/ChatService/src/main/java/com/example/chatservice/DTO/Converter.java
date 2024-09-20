@@ -7,6 +7,9 @@ import com.example.chatservice.domain.UserEntity;
 import com.xent.DTO.ChatService.*;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 @Component
 public class Converter {
     public FullTopicDto fullTopicDto(TopicEntity topicEntity) {
@@ -57,22 +60,64 @@ public class Converter {
     }
 
     public ShortRoomDto shortRoomDto(RoomEntity roomEntity) {
-        FullRoomDto fullRoomDto = fullRoomDto(roomEntity);
-        return new ShortRoomDto(fullRoomDto);
+       ShortRoomDto shortRoomDto = new ShortRoomDto();
+       shortRoomDto.setName(roomEntity.getName());
+       if (roomEntity.getTopic() != null) {
+           shortRoomDto.setTopicName(roomEntity.getTopic().getTopicName());
+       }
+       Collection<String> members = new ArrayList<>();
+       Collection<String> connections = new ArrayList<>();
+       Collection<String> messages = new ArrayList<>();
+       for (MessageEntity messageEntity: roomEntity.getMessages()) {
+           messages.add(messageEntity.getMessage());
+       }
+       for (UserEntity userEntity: roomEntity.getMembers()) {
+           members.add(userEntity.getNickname());
+       }
+       for (UserEntity userEntity: roomEntity.getConnectedMembers()) {
+           connections.add(userEntity.getNickname());
+       }
+       shortRoomDto.setMessages(messages);
+       shortRoomDto.setMemberNames(members);
+       shortRoomDto.setConnectedMemberNames(connections);
+       return shortRoomDto;
     }
     public ShortChatUserDto shortChatUserDto(UserEntity user) {
-        FullChatUserDto fullChatUserDto = fullChatUserDto(user);
-        return new ShortChatUserDto(fullChatUserDto);
+        ShortChatUserDto shortChatUserDto = new ShortChatUserDto();
+        shortChatUserDto.setUsername(user.getNickname());
+        Collection<String> rooms = new ArrayList<>();
+        Collection<String> messages = new ArrayList<>();
+        Collection<String> connections = new ArrayList<>();
+        for (RoomEntity roomEntity: user.getRooms()) {
+            rooms.add(roomEntity.getName());
+        }
+        for (MessageEntity messageEntity: user.getMessages()) {
+            messages.add(messageEntity.getMessage());
+        }
+        for (RoomEntity roomEntity: user.getConnections()) {
+            connections.add(roomEntity.getName());
+        }
+        shortChatUserDto.setMessages(messages);
+        shortChatUserDto.setRoomNames(rooms);
+        shortChatUserDto.setConnectedRoomNames(connections);
+        return shortChatUserDto;
     }
 
     public ShortTopicDto shortTopicDto(TopicEntity topicEntity) {
-        FullTopicDto fullTopicDto = fullTopicDto(topicEntity);
-        return new ShortTopicDto(fullTopicDto);
+        ShortTopicDto shortTopicDto = new ShortTopicDto();
+        shortTopicDto.setName(topicEntity.getTopicName());
+        if (topicEntity.getRoom() != null) {
+            shortTopicDto.setRoomName(topicEntity.getRoom().getName());
+        }
+        return shortTopicDto;
     }
 
     public ShortMessageDto shortMessageDto(MessageEntity messageEntity) {
-        FullMessageDto fullMessageDto = fullMessageDto(messageEntity);
-        return new ShortMessageDto(fullMessageDto);
+        return new ShortMessageDto(
+                messageEntity.getMessage(),
+                messageEntity.getTimeStamp(),
+                messageEntity.getRoom().getName(),
+                messageEntity.getSender().getNickname());
     }
 
 }

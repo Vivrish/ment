@@ -2,6 +2,9 @@ package com.example.apigateway.config;
 
 import com.xent.DTO.APIGateway.FailureDto;
 import com.xent.DTO.APIGateway.FullUserDto;
+import com.xent.DTO.APIGateway.ShortUserAndRoomDto;
+import com.xent.DTO.ChatService.ShortMessageDto;
+import com.xent.DTO.ChatService.ShortRoomDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +37,36 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<String, FailureDto> kafkaTemplateFailure() {
         return new KafkaTemplate<>(producerFactoryFailure());
+    }
+
+    @Bean
+    public ProducerFactory<String, ShortRoomDto> producerFactoryNewRoom() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ShortRoomDto> kafkaTemplateNewRoom() {
+        return new KafkaTemplate<>(producerFactoryNewRoom());
+    }
+
+    @Bean
+    public ProducerFactory<String, ShortMessageDto> producerFactoryMessageHttp() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ShortMessageDto> kafkaTemplateMessageHttp() {
+        return new KafkaTemplate<>(producerFactoryMessageHttp());
+    }
+
+    @Bean
+    public ProducerFactory<String, ShortUserAndRoomDto> producerFactoryAddUserToRoom() {
+        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ShortUserAndRoomDto> kafkaTemplateAddUserToRoom() {
+        return new KafkaTemplate<>(producerFactoryAddUserToRoom());
     }
 
     private Map<String, Object> generateConfigProps() {

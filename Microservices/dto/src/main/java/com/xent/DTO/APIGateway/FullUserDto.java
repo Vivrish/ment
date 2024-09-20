@@ -12,8 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -54,6 +53,13 @@ public class FullUserDto {
     public void updateAttributes(@NonNull FullChatUserDto chatUser) {
         this.rooms = chatUser.getRooms();
         this.messages = chatUser.getMessages();
+    }
+
+    public boolean isEquivalent(FullUserDto other) {
+        return Objects.equals(this.username, other.getUsername())
+                && Objects.equals(this.firstName, other.getFirstName())
+                && Objects.equals(this.lastName, other.getLastName())
+                && Objects.equals(this.description, other.getDescription());
     }
 
 

@@ -11,9 +11,6 @@ class ApiGatewayApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-	@Test
-	void test2(){
-		System.out.println("Test executed");
-	}
+
 
 }

@@ -1,5 +1,4 @@
-package com.xent.DTO.ChatService;
-
+package com.xent.DTO.APIGateway;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,9 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FullTopicDto {
-    private String name;
-    private ShortRoomDto room = null;
-
-
+public class ShortUserAndRoomDto {
+    private String username;
+    private String roomName;
 }

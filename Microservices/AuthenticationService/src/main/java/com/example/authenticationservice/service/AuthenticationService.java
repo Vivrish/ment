@@ -11,6 +11,7 @@ import com.example.authenticationservice.repository.AuthRepository;
 import com.example.authenticationservice.repository.RoleRepository;
 import com.xent.DTO.AuthenticationService.RoleDto;
 import com.xent.DTO.AuthenticationService.UserCredentialsDto;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import java.util.List;
 @Service
 @Slf4j
 @AllArgsConstructor
+@Transactional
 public class AuthenticationService {
     private final AuthRepository authRepository;
     private final RoleRepository roleRepository;
