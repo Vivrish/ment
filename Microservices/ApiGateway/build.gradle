@@ -72,6 +72,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'com.h2database:h2:2.2.220'
+	testImplementation 'com.xent:dto:1.0.0-SNAPSHOT'
 	integrationTestImplementation 'com.h2database:h2:2.2.220'
 }
 
@@ -98,3 +99,8 @@ tasks.register('integrationTest', Test) {
 tasks.named('integrationTest') {
 	useJUnitPlatform()
 }
+
+tasks.named('processIntegrationTestResources') {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+

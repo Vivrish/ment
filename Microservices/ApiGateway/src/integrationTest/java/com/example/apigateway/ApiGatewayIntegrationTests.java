@@ -13,5 +13,10 @@ class ApiGatewayIntegrationTests {
 
 	}
 
+	@Test
+	void fullUserDtoEquals() {
+
+	}
+
 
 }
