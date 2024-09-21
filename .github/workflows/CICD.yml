@@ -214,6 +214,7 @@ jobs:
           sleep 30
           cd E2ETests
           ./gradlew test
+          cd ..
           docker-compose -f docker-compose.ci.yml down
         continue-on-error: true
 
