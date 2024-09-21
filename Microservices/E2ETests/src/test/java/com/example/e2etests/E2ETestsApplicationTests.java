@@ -6,14 +6,36 @@ import com.xent.DTO.ChatService.ShortMessageDto;
 import com.xent.DTO.ChatService.ShortRoomDto;
 import io.restassured.RestAssured;
 import io.restassured.response.ValidatableResponse;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.lang.NonNullApi;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.ActiveProfiles;
 
+import org.springframework.web.socket.client.WebSocketClient;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
+import org.springframework.web.socket.sockjs.SockJsService;
+import org.springframework.web.socket.sockjs.client.SockJsClient;
+import org.springframework.web.socket.sockjs.client.Transport;
+import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
+
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static io.restassured.RestAssured.*;
@@ -154,6 +176,57 @@ class E2ETestsApplicationTests {
         assertTrue(serverSideRoomMessages.contains(carlMessage.getMessage()));
 
         log.debug("messagingInOneRoom scenario is complete");
+    }
+
+    @Test
+    public void testWebSockets() throws ExecutionException, InterruptedException {
+        log.debug("Beginning the websockets test");
+        FullUserDto ann = new FullUserDto("ann", "pwd", "Anny", "Brown", "Unknown");
+        UserCredentialsDto annCredentials = new UserCredentialsDto(ann);
+        ShortRoomDto annRoom = new ShortRoomDto("annRoom");
+        registerUser(ann);
+        pollUser(annCredentials);
+        String annAuth = loginUser(annCredentials);
+        makeRoom(annRoom, annAuth);
+        Thread.sleep(10000);
+        addUserToRoom("ann", "annRoom", annAuth);
+        Thread.sleep(10000);
+        log.debug("Finished setting up data for testing websockets");
+
+
+        WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
+                List.of(new WebSocketTransport(new StandardWebSocketClient()))));
+        StompSession session = stompClient.connectAsync("ws://localhost:8080/ws", new StompSessionHandlerAdapter() {
+        }).get();
+        session.subscribe("/topic/room/annRoom", new StompFrameHandler() {
+            @NonNull
+            @Override
+            public Type getPayloadType(@NonNull StompHeaders headers) {
+                return ShortMessageDto.class;
+            }
+
+            @Override
+            public void handleFrame(@NonNull StompHeaders headers, Object payload) {
+                log.debug("Frame received: {}", payload);
+            }
+        });
+
+        ShortMessageDto message = new ShortMessageDto("msg", "annRoom", "ann");
+        session.send("/app/sendMessage", message);
+        log.debug("Websocket message is sent");
+        Thread.sleep(10000);
+
+        FullUserDto serverSideAnn = getUser(ann.getUsername(), annAuth).extract().as(FullUserDto.class);
+        log.debug("Got server side ann: {}", serverSideAnn);
+
+        assertTrue(serverSideAnn.getRooms().contains(annRoom));
+        assertEquals(serverSideAnn.getMessages().size(), 1);
+        ShortMessageDto serverSideMessage = serverSideAnn.getMessages().iterator().next();
+        assertEquals(serverSideMessage.getMessage(), "msg");
+        assertEquals(serverSideAnn.getRooms().size(), 1);
+        ShortRoomDto serverSideRoom = serverSideAnn.getRooms().iterator().next();
+        assertTrue(serverSideRoom.getMessages().contains("msg"));
+        log.debug("Finished testing websockets");
     }
 
     private String loginUser(UserCredentialsDto userToRegisterCredentials) {
