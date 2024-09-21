@@ -51,7 +51,6 @@ jobs:
           - AuthenticationService
           - UserManagementService
           - ChatService
-          - EurekaServer
 
     steps:
       - name: Checkout code
