@@ -89,6 +89,7 @@ jobs:
           - UserManagementService
           - ChatService
           - EurekaServer
+          - WebSocketsGateway
 
     steps:
       - name: Checkout code
@@ -130,6 +131,7 @@ jobs:
           UserManagementService: usermanagementservice
           ChatService: chatservice
           EurekaServer: eureka
+          WebSocketsGateway: websocketsgateway
         run: |
           cd Microservices/${{ matrix.service }}  
           docker build -t $${{ matrix.service }} .

@@ -108,3 +108,8 @@ services:
       - authservice
       - chatservice
       - usermanagementservice
+  websocketsgateway:
+    container_name: "WebSocketsGateway"
+    image: ghcr.io/vivrish/websocketsgateway:latest
+    ports:
+      - "8200:8200"
