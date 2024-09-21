@@ -34,7 +34,9 @@ public class Converter {
 
     public FullUserDetailsDto fullUserDetailsDto(User user) {
         FullUserDetailsDto userDetailsDto = new FullUserDetailsDto();
-        userDetailsDto.setSettings(settingsDto(user.getSettings()));
+        if (user.getSettings() != null) {
+            userDetailsDto.setSettings(settingsDto(user.getSettings()));
+        }
         for (Contact contact: user.getContacts()) {
             userDetailsDto.addContact(contactDto(contact));
         }
