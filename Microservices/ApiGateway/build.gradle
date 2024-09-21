@@ -21,14 +21,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-	maven {
-		name = "GitHubPackages"
-		url = uri("https://maven.pkg.github.com/Vivrish/ment")
-		credentials {
-			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-			password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
-		}
-	}
 }
 
 ext {
@@ -48,35 +40,39 @@ sourceSets {
 	}
 }
 
+repositories {
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/Vivrish/ment")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+		}
+	}
+	mavenCentral()
+}
+
 dependencies {
-	// Kafka
-
 	implementation 'org.springframework.kafka:spring-kafka'
-
-	// Jackson
-
+	implementation 'org.apache.kafka:kafka-clients:3.4.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	implementation 'com.fasterxml.jackson.core:jackson-core'
+	implementation 'com.fasterxml.jackson.core:jackson-annotations'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter'
+	implementation 'org.springframework.cloud:spring-cloud-starter-gateway-mvc'
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
-	// Shared DTO package
 	implementation 'com.xent:dto:1.0.0-SNAPSHOT'
-
-	// Lombok
 	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
-
-	// Development
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
-	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testImplementation 'com.h2database:h2:2.2.220'
 	testImplementation 'com.xent:dto:1.0.0-SNAPSHOT'
-
-	// Integration Test
 	integrationTestImplementation 'com.h2database:h2:2.2.220'
 }
 
