@@ -86,12 +86,15 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
+
+
 tasks.register('integrationTest', Test) {
 	description = 'Runs the integration tests.'
 	group = 'verification'
 	testClassesDirs = sourceSets.integrationTest.output.classesDirs
 	classpath = sourceSets.integrationTest.runtimeClasspath
 }
+
 
 tasks.named('integrationTest') {
 	useJUnitPlatform()
@@ -100,3 +103,4 @@ tasks.named('integrationTest') {
 tasks.named('processIntegrationTestResources') {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
