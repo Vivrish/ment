@@ -192,6 +192,7 @@ class E2ETestsApplicationTests {
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
         StompSession session = stompClient.connectAsync("ws://localhost:8200/ws", new StompSessionHandlerAdapter() {
         }).get();
+        log.debug("Session created");
         session.subscribe("/topic/room/annRoom", new StompFrameHandler() {
             @NonNull
             @Override
@@ -204,6 +205,7 @@ class E2ETestsApplicationTests {
                 log.debug("Frame received: {}", payload);
             }
         });
+        log.debug("Subscribe to the room topic");
 
         ShortMessageDto message = new ShortMessageDto("msg", "annRoom", "ann");
         session.send("/app/sendMessage", message);
