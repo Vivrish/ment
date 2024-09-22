@@ -113,3 +113,5 @@ services:
     image: ghcr.io/vivrish/websocketsgateway:latest
     ports:
       - "8200:8200"
+    volumes:
+      - ./logs/websocketsgateway:/app/logs
