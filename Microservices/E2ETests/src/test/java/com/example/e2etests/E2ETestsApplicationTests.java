@@ -13,27 +13,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.lang.NonNullApi;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.ActiveProfiles;
 
-import org.springframework.web.socket.client.WebSocketClient;
+
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
-import org.springframework.web.socket.sockjs.SockJsService;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
-import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -196,7 +190,7 @@ class E2ETestsApplicationTests {
 
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
-        StompSession session = stompClient.connectAsync("ws://localhost:8080/ws", new StompSessionHandlerAdapter() {
+        StompSession session = stompClient.connectAsync("ws://localhost:8200/ws", new StompSessionHandlerAdapter() {
         }).get();
         session.subscribe("/topic/room/annRoom", new StompFrameHandler() {
             @NonNull
