@@ -236,7 +236,7 @@ jobs:
           path: logs/
 
   deploy:
-    needs: integration-tests
+    needs: [integration-tests, build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
