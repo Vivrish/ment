@@ -236,7 +236,7 @@ jobs:
           path: logs/
 
   deploy:
-    needs: [integration-tests, build]
+    needs: [integration-tests, build, unit-tests]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -258,7 +258,8 @@ jobs:
         run: |
           mkdir $HOME/${{matrix.service}}
           touch $HOME/${{matrix.service}}/gcloud-key.json
-          echo "${{ secrets.GCP_SA_KEY }}" > $HOME/${{matrix.service}}/gcloud-key.json
+          echo '${{ secrets.GCP_SA_KEY }}' > $HOME/${{matrix.service}}/gcloud-key.json
+          cat $HOME/${{matrix.service}}/gcloud-key.json
           gcloud auth activate-service-account --key-file=$HOME/${{matrix.service}}/gcloud-key.json
           gcloud config set project ${{ secrets.GCP_PROJECT }}
 
