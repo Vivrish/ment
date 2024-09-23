@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: websocketsgateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: websocketsgateway
+  template:
+    metadata:
+      labels:
+        app: websocketsgateway
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: websocketsgateway
+          image: ghcr.io/vivrish/websocketsgateway:latest
+          ports:
+            - containerPort: 8200
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
