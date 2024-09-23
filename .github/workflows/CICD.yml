@@ -256,9 +256,9 @@ jobs:
     steps:
       - name: Set up Gcloud
         run: |
-          mkdir $HOME/${{matrix.service}}
-          touch $HOME/${{matrix.service}}/gcloud-key.json
-          echo '${{ secrets.GCP_SA_KEY }}' > $HOME/${{matrix.service}}/gcloud-key.json
+          mkdir ${{matrix.service}}
+          touch ${{matrix.service}}/gcloud-key.json
+          echo '${{secrets.GCP_SA_KEY}}' > ${{matrix.service}}/gcloud-key.json
           gcloud auth activate-service-account --key-file=$HOME/${{matrix.service}}/gcloud-key.json
           gcloud config set project ${{ secrets.GCP_PROJECT }}
         continue-on-error: true
@@ -267,7 +267,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: pipeline-logs
-          path: $HOME/${{matrix.service}}/gcloud-key.json
+          path: ${{matrix.service}}/gcloud-key.json
 
       - name: Get GKE credentials
         run: gcloud container clusters get-credentials xent-cluster --zone europe-central2
