@@ -255,7 +255,7 @@ jobs:
           - Zookeeper
     steps:
       - name: Install gke-gcloud-auth-plugin
-        run: gcloud components install gke-gcloud-auth-plugin
+        run: sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
 
       - name: Set GKE auth plugin environment variable
         run: echo "USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
