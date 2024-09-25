@@ -194,7 +194,10 @@ class E2ETestsApplicationTests {
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
         StompSession session = stompClient.connectAsync("ws://localhost:8100/ws", new StompSessionHandlerAdapter() {
         }).get();
+        Thread.sleep(50000);
         log.debug("Session created");
+        assertTrue(session.isConnected());
+        log.debug("Session connected");
         session.subscribe("/topic/room/annRoom", new StompFrameHandler() {
             @NonNull
             @Override
