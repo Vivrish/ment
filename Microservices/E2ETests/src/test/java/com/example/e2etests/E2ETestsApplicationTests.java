@@ -1,5 +1,7 @@
 package com.example.e2etests;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xent.DTO.APIGateway.FullUserDto;
 import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import com.xent.DTO.ChatService.ShortMessageDto;
@@ -173,7 +175,7 @@ class E2ETestsApplicationTests {
     }
 
     @Test
-    public void testWebSockets() throws ExecutionException, InterruptedException {
+    public void testWebSockets() throws ExecutionException, InterruptedException, JsonProcessingException {
         log.debug("Beginning the websockets test");
         FullUserDto ann = new FullUserDto("ann", "pwd", "Anny", "Brown", "Unknown");
         UserCredentialsDto annCredentials = new UserCredentialsDto(ann);
@@ -208,7 +210,8 @@ class E2ETestsApplicationTests {
         log.debug("Subscribe to the room topic");
 
         ShortMessageDto message = new ShortMessageDto("msg", "annRoom", "ann");
-        session.send("/app/sendMessage", message);
+        ObjectMapper objectMapper = new ObjectMapper();
+        session.send("/app/sendMessage", objectMapper.writeValueAsBytes(message));
         log.debug("Websocket message is sent");
         Thread.sleep(10000);
 
