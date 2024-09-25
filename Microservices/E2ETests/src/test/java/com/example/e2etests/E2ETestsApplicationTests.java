@@ -190,7 +190,7 @@ class E2ETestsApplicationTests {
 
         WebSocketStompClient stompClient = new WebSocketStompClient(new SockJsClient(
                 List.of(new WebSocketTransport(new StandardWebSocketClient()))));
-        StompSession session = stompClient.connectAsync("ws://localhost:8200/ws", new StompSessionHandlerAdapter() {
+        StompSession session = stompClient.connectAsync("ws://ChatService:8100/ws", new StompSessionHandlerAdapter() {
         }).get();
         log.debug("Session created");
         session.subscribe("/topic/room/annRoom", new StompFrameHandler() {
