@@ -89,7 +89,6 @@ jobs:
           - UserManagementService
           - ChatService
           - EurekaServer
-          - WebSocketsGateway
 
     steps:
       - name: Checkout code
@@ -131,7 +130,6 @@ jobs:
           UserManagementService: usermanagementservice
           ChatService: chatservice
           EurekaServer: eureka
-          WebSocketsGateway: websocketsgateway
         run: |
           cd Microservices/${{ matrix.service }}  
           docker build -t $${{ matrix.service }} .
@@ -144,7 +142,6 @@ jobs:
           UserManagementService: usermanagementservice
           ChatService: chatservice
           EurekaServer: eureka
-          WebSocketsGateway: websocketsgateway
         run: |
           docker tag $${{ matrix.service }} $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
           docker push $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
@@ -206,7 +203,6 @@ jobs:
           docker pull $DOCKER_REGISTRY/vivrish/usermanagementservice:latest
           docker pull $DOCKER_REGISTRY/vivrish/chatservice:latest 
           docker pull $DOCKER_REGISTRY/vivrish/eureka:latest
-          docker pull $DOCKER_REGISTRY/vivrish/websocketsgateway:latest
 
       - name: Run E2E tests
         env:
