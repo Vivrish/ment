@@ -270,5 +270,5 @@ jobs:
       - name: Deploy to GKE
         run: |
           cd Microservices/K8s/${{matrix.service}}
-          kubectl apply -f k8s/deployment-apigateway.yml
-          kubectl apply -f k8s/service-apigateway.yml
+          kubectl apply -f Deployment.yml
+          kubectl apply -f Service.yml
