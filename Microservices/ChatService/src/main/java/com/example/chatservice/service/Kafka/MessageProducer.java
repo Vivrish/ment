@@ -8,6 +8,7 @@ import com.example.chatservice.exception.UserIsNotAMemberException;
 import com.example.chatservice.repository.RoomRepository;
 import com.example.chatservice.repository.UserRepository;
 import com.xent.DTO.ChatService.ShortMessageDto;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,6 +22,7 @@ public class MessageProducer {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public void sendMessage(ShortMessageDto message) {
         RoomEntity roomEntity = roomRepository.findByName(message.getRoomName()).orElseThrow(RoomDoesNotExistException::new);
         UserEntity userEntity = userRepository.findByNickname(message.getSenderName()).orElseThrow(UserDoesNotExistException::new);
