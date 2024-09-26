@@ -29,7 +29,7 @@ public class MessageProducer {
         if (!roomEntity.getMembers().contains(userEntity)) {
             throw new UserIsNotAMemberException();
         }
-        log.debug("Sending message {} to room {}", message.getMessage(), message.getRoomName());
+        log.debug("Sending message {} to topic {}", message.getMessage(), roomEntity.getTopic().getTopicName());
         kafkaTemplate.send(roomEntity.getTopic().getTopicName(), message.getSenderName(), message);
         log.debug("Message is sent successfully");
     }
