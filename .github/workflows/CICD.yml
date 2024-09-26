@@ -20,6 +20,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Check for changes in the DTO directory
+        id: check_changes
+        run: |
+          if git diff --quiet HEAD^ HEAD -- Microservices/dto/; then
+            echo "No changes detected in the DTO package. Exiting."
+            exit 0
+          fi
+
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
