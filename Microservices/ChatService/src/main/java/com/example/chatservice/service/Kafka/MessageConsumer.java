@@ -90,6 +90,7 @@ public class MessageConsumer {
     @KafkaListener(topics = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void sendMessageHttp(ShortMessageDto message) {
         log.info("Adding new message via HTTP");
+        log.debug("Http message consumed: {}", message);
         messageService.addMessage(message);
     }
 
