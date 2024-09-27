@@ -48,8 +48,6 @@ public class MessageConsumer {
     @KafkaListener(topics = "topic-room-annRoom", groupId = "chatServiceSendMessageTcpDebug", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void consumeRoomMessageDebug(ShortMessageDto message) {
         log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
-        messagingTemplate.convertAndSend(String.format("/topic/room/%s", message.getRoomName()), message.getMessage());
-        messageService.addMessage(message);
         log.debug("Message consumed(DEBUG): {}", message.getMessage());
     }
 
