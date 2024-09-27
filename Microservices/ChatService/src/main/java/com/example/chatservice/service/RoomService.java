@@ -100,7 +100,7 @@ public class RoomService {
 
     private void createTopic(String topicName) {
         log.info("Creating new topic: {}", topicName);
-        NewTopic topic = TopicBuilder.name(topicName).partitions(1).replicas(1).build();
+        NewTopic topic = TopicBuilder.name(topicName).partitions(5).replicas(1).build();
         kafkaAdmin.createOrModifyTopics(topic);
     }
 
