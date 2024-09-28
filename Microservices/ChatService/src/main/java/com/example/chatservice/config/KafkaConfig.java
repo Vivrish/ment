@@ -51,6 +51,18 @@ public class KafkaConfig {
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, ShortMessageDto> consumerFactoryMessageTcp() {
+        return new DefaultKafkaConsumerFactory<>(generateProps());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> kafkaListenerContainerFactoryMessageTcp() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryMessageTcp());
+        return factory;
+    }
+
     // Configuration for topics that use FullUserDto
 
     @Bean
