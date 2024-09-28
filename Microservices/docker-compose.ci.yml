@@ -71,6 +71,7 @@ services:
     depends_on:
       - kafka
       - user_details_db
+      - eureka
 
   chatservice:
     container_name: "ChatService"
@@ -82,6 +83,7 @@ services:
     depends_on:
       - kafka
       - chats_db
+      - eureka
 
   authservice:
     container_name: "AuthService"
@@ -108,10 +110,3 @@ services:
       - authservice
       - chatservice
       - usermanagementservice
-  websocketsgateway:
-    container_name: "WebSocketsGateway"
-    image: ghcr.io/vivrish/websocketsgateway:latest
-    ports:
-      - "8200:8200"
-    volumes:
-      - ./logs/websocketsgateway:/app/logs

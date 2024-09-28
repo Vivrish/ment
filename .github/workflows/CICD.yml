@@ -120,6 +120,7 @@ jobs:
         env:
           USERNAME: ${{github.actor}}
           TOKEN: ${{secrets.PAT}}
+          SPRING_PROFILES_ACTIVE: ci
         run: |
           cd Microservices/${{ matrix.service }}
           ./gradlew build -x test --no-daemon
