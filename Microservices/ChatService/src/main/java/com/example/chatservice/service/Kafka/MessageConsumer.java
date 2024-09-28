@@ -47,8 +47,13 @@ public class MessageConsumer {
 
     @KafkaListener(topics = "topic-room-annRoom", groupId = "chatServiceSendMessageTcpDebug", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void consumeRoomMessageDebug(ShortMessageDto message) {
-        log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
-        log.debug("Message consumed(DEBUG): {}", message.getMessage());
+        try {
+            log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
+            log.debug("Message consumed(DEBUG): {}", message.getMessage());
+        }
+        catch (Exception e) {
+            log.debug("Topic topic-room-annRoom is not available. Waiting {}", e.getMessage());
+        }
     }
 
 
