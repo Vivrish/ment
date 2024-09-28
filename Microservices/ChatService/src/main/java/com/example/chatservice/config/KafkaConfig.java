@@ -31,7 +31,7 @@ public class KafkaConfig {
     // Configuration for topics that use ShorMessageDto
     @Bean
     public ProducerFactory<String, ShortMessageDto> producerFactoryMessage() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortMessageDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoChatService"));
     }
 
     @Bean
@@ -55,7 +55,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, FullUserDto> producerFactoryUser() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("FullUserDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoChatService"));
     }
 
     @Bean
@@ -83,7 +83,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, FailureDto> producerFactoryFailure() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoChatService"));
     }
 
     @Bean

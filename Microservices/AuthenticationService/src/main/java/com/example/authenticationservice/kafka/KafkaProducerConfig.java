@@ -21,7 +21,7 @@ public class KafkaProducerConfig {
     private String BOOTSTRAP_SERVERS_CONFIG;
     @Bean
     public ProducerFactory<String, FailureDto> producerFactoryFailure() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoAuthService"));
     }
 
     @Bean
@@ -29,11 +29,12 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(producerFactoryFailure());
     }
 
-    public Map<String, Object> generateConfigProps() {
+    public Map<String, Object> generateConfigProps(String clientId) {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
         return configProps;
     }
 }

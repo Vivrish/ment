@@ -24,7 +24,7 @@ public class KafkaProducerConfig {
     private String BOOTSTRAP_SERVERS_CONFIG;
     @Bean
     public ProducerFactory<String, FullUserDto> producerFactory() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("FullUserDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FullUserDtoApiGateway"));
     }
 
     @Bean
@@ -34,7 +34,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, FailureDto> producerFactoryFailure() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoApiGateway"));
     }
 
     @Bean
@@ -44,7 +44,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, ShortRoomDto> producerFactoryNewRoom() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortRoomDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortRoomDtoApiGateway"));
     }
 
     @Bean
@@ -54,7 +54,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, ShortMessageDto> producerFactoryMessageHttp() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortMessageDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortMessageDtoApiGateway"));
     }
 
     @Bean
@@ -64,7 +64,7 @@ public class KafkaProducerConfig {
 
     @Bean
     public ProducerFactory<String, ShortUserAndRoomDto> producerFactoryAddUserToRoom() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortUserAndRoomDto"));
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortUserAndRoomDtoApiGateway"));
     }
 
     @Bean
