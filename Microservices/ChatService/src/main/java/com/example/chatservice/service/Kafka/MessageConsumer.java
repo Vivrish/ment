@@ -45,16 +45,16 @@ public class MessageConsumer {
         log.debug("Message consumed: {}", message.getMessage());
     }
 
-    @KafkaListener(topics = "topic-room-annRoom", groupId = "chatServiceSendMessageTcpDebug", containerFactory = "kafkaListenerContainerFactoryMessage")
-    public void consumeRoomMessageDebug(ShortMessageDto message) {
-        try {
-            log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
-            log.debug("Message consumed(DEBUG): {}", message.getMessage());
-        }
-        catch (Exception e) {
-            log.debug("Topic topic-room-annRoom is not available. Waiting {}", e.getMessage());
-        }
-    }
+//    @KafkaListener(topics = "topic-room-annRoom", groupId = "chatServiceSendMessageTcpDebug", containerFactory = "kafkaListenerContainerFactoryMessage")
+//    public void consumeRoomMessageDebug(ShortMessageDto message) {
+//        try {
+//            log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
+//            log.debug("Message consumed(DEBUG): {}", message.getMessage());
+//        }
+//        catch (Exception e) {
+//            log.debug("Topic topic-room-annRoom is not available. Waiting {}", e.getMessage());
+//        }
+//    }
 
 
     @KafkaListener(topics = "register", groupId = "chatServiceRegister", containerFactory = "kafkaListenerContainerFactoryUser")
@@ -90,12 +90,12 @@ public class MessageConsumer {
         roomService.createRoom(room);
     }
 
-    @KafkaListener(topics = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
-    public void sendMessageHttp(ShortMessageDto message) {
-        log.info("Adding new message via HTTP");
-        log.debug("Http message consumed: {}", message);
-        messageService.addMessage(message);
-    }
+//    @KafkaListener(topics = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
+//    public void sendMessageHttp(ShortMessageDto message) {
+//        log.info("Adding new message via HTTP");
+//        log.debug("Http message consumed: {}", message);
+//        messageService.addMessage(message);
+//    }
 
     @KafkaListener(topics = "add-user-to-room", groupId = "chatServiceAddUserToRoom", containerFactory = "kafkaListenerContainerFactoryAddUserToRoom")
     public void addUserToRoom(ShortUserAndRoomDto userAndRoomDto) {
