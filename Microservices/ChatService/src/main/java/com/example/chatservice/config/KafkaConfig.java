@@ -53,8 +53,11 @@ public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, ShortMessageDto> consumerFactoryMessageTcp() {
-        return new DefaultKafkaConsumerFactory<>(generateProps());
+
+        return new DefaultKafkaConsumerFactory<>(generateFastRefreshProps());
     }
+
+
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> kafkaListenerContainerFactoryMessageTcp() {
@@ -150,6 +153,17 @@ public class KafkaConfig {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return props;
+    }
+
+    private Map<String, Object> generateFastRefreshProps() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
+        props.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG, 10000);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
         props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
