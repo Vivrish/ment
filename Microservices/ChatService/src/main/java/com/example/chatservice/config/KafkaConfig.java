@@ -31,7 +31,7 @@ public class KafkaConfig {
     // Configuration for topics that use ShorMessageDto
     @Bean
     public ProducerFactory<String, ShortMessageDto> producerFactoryMessage() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortMessageDto"));
     }
 
     @Bean
@@ -55,7 +55,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, FullUserDto> producerFactoryUser() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FullUserDto"));
     }
 
     @Bean
@@ -83,7 +83,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, FailureDto> producerFactoryFailure() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDto"));
     }
 
     @Bean
@@ -144,11 +144,12 @@ public class KafkaConfig {
         return props;
     }
 
-    private Map<String, Object> generateConfigProps() {
+    private Map<String, Object> generateConfigProps(String clientId) {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
         return configProps;
     }
 
