@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: apigateway
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: apigateway
@@ -21,4 +21,11 @@ spec:
             - containerPort: 8080
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: "prod"
+              value: "cloud"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

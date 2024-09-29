@@ -20,6 +20,9 @@ spec:
           ports:
             - containerPort: 2181
           resources:
-            limits:
+            requests:
               memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
               cpu: "500m"

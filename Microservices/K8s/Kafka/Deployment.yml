@@ -31,3 +31,10 @@ spec:
               value: zookeeper:2181
             - name: KAFKA_CREATE_TOPICS
               value: "my-topic:1:1"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
