@@ -10,6 +10,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -24,11 +25,13 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String BOOTSTRAP_SERVERS_CONFIG;
 
     // Configuration for topics that use ShorMessageDto
     @Bean
     public ProducerFactory<String, ShortMessageDto> producerFactoryMessage() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("ShortMessageDtoChatService"));
     }
 
     @Bean
@@ -48,11 +51,26 @@ public class KafkaConfig {
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, ShortMessageDto> consumerFactoryMessageTcp() {
+
+        return new DefaultKafkaConsumerFactory<>(generateFastRefreshProps());
+    }
+
+
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> kafkaListenerContainerFactoryMessageTcp() {
+        ConcurrentKafkaListenerContainerFactory<String, ShortMessageDto> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryMessageTcp());
+        return factory;
+    }
+
     // Configuration for topics that use FullUserDto
 
     @Bean
     public ProducerFactory<String, FullUserDto> producerFactoryUser() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FullUserDtoChatService"));
     }
 
     @Bean
@@ -80,7 +98,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, FailureDto> producerFactoryFailure() {
-        return new DefaultKafkaProducerFactory<>(generateConfigProps());
+        return new DefaultKafkaProducerFactory<>(generateConfigProps("FailureDtoChatService"));
     }
 
     @Bean
@@ -132,20 +150,33 @@ public class KafkaConfig {
     // Shared props
 
     private Map<String, Object> generateProps() {
+
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "chatService");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return props;
     }
 
-    private Map<String, Object> generateConfigProps() {
+    private Map<String, Object> generateFastRefreshProps() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
+        props.put(ConsumerConfig.METADATA_MAX_AGE_CONFIG, 10000);
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.ALLOW_AUTO_CREATE_TOPICS_CONFIG, false);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        return props;
+    }
+
+    private Map<String, Object> generateConfigProps(String clientId) {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put(ProducerConfig.CLIENT_ID_CONFIG, clientId);
         return configProps;
     }
 

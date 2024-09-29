@@ -37,13 +37,25 @@ public class MessageConsumer {
 
 
 
-    @KafkaListener(topicPattern = "topic-room-.*", groupId = "main", containerFactory = "kafkaListenerContainerFactoryMessage")
+    @KafkaListener(topicPattern = "topic-room-.*", groupId = "chatServiceSendMessageTcp", containerFactory = "kafkaListenerContainerFactoryMessageTcp")
     public void consumeRoomMessage(ShortMessageDto message) {
         log.debug("Consumed message on topic topic-room: {}", message);
         messagingTemplate.convertAndSend(String.format("/topic/room/%s", message.getRoomName()), message.getMessage());
         messageService.addMessage(message);
         log.debug("Message consumed: {}", message.getMessage());
     }
+
+    @KafkaListener(topics = "topic-room-annRoom", groupId = "chatServiceSendMessageTcpDebug", containerFactory = "kafkaListenerContainerFactoryMessage")
+    public void consumeRoomMessageDebug(ShortMessageDto message) {
+        try {
+            log.debug("Consumed message on topic topic-room(DEBUG): {}", message);
+            log.debug("Message consumed(DEBUG): {}", message.getMessage());
+        }
+        catch (Exception e) {
+            log.debug("Topic topic-room-annRoom is not available. Waiting {}", e.getMessage());
+        }
+    }
+
 
     @KafkaListener(topics = "register", groupId = "chatServiceRegister", containerFactory = "kafkaListenerContainerFactoryUser")
     public void consumeRegister(FullUserDto fullUserToRegister) {
@@ -81,6 +93,7 @@ public class MessageConsumer {
     @KafkaListener(topics = "send-message-http", groupId = "chatServiceSendMessageHttp", containerFactory = "kafkaListenerContainerFactoryMessage")
     public void sendMessageHttp(ShortMessageDto message) {
         log.info("Adding new message via HTTP");
+        log.debug("Http message consumed: {}", message);
         messageService.addMessage(message);
     }
 

@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-details-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-details-db
+  template:
+    metadata:
+      labels:
+        app: user-details-db
+    spec:
+      containers:
+        - name: user-details-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: user_personal_info_database
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: secret
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"

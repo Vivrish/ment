@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credentials-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credentials-db
+  template:
+    metadata:
+      labels:
+        app: credentials-db
+    spec:
+      containers:
+        - name: credentials-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: user_credentials_database
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: secret
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "300m"
