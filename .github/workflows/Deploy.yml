@@ -1,4 +1,4 @@
-name: CI/CD pipeline
+name: Deploy pipeline
 
 on:
   push:
@@ -166,7 +166,7 @@ jobs:
           ./gradlew integrationTest --no-daemon
 
   deploy:
-    needs: [unit-tests, integration-tests]
+    needs: [unit-tests, integration-tests, build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
