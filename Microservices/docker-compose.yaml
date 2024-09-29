@@ -54,15 +54,20 @@ services:
       - "5433:5432"
 
   eureka:
+    container_name: "EurekaServer"
     image: eureka:latest
     ports:
       - "8090:8090"
+    volumes:
+      - ./logs/eureka:/app/logs
 
   usermanagementservice:
     container_name: "UserManagementService"
     image: usermanagementservice:latest
     ports:
       - "8060:8060"
+    volumes:
+      - ./logs/usermanagementservice:/app/logs
     depends_on:
       - kafka
       - user_details_db
@@ -72,6 +77,8 @@ services:
     image: chatservice:latest
     ports:
       - "8100:8100"
+    volumes:
+      - ./logs/chatservice:/app/logs
     depends_on:
       - kafka
       - chats_db
@@ -81,6 +88,8 @@ services:
     image: authservice:latest
     ports:
       - "8070:8070"
+    volumes:
+      - ./logs/authservice:/app/logs
     depends_on:
       - kafka
       - credentials_db
@@ -91,6 +100,8 @@ services:
     image: apigateway:latest
     ports:
       - "8080:8080"
+    volumes:
+      - ./logs/apigateway:/app/logs
     depends_on:
       - kafka
       - eureka

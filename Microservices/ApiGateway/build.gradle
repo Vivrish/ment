@@ -27,6 +27,31 @@ ext {
 	set('springCloudVersion', "2023.0.3")
 }
 
+sourceSets {
+	integrationTest {
+		java {
+			srcDir 'src/integrationTest/java'
+		}
+		resources {
+			srcDir 'src/integrationTest/resources'
+		}
+		compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
+}
+
+repositories {
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/Vivrish/ment")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+		}
+	}
+	mavenCentral()
+}
+
 dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.apache.kafka:kafka-clients:3.4.0'
@@ -39,12 +64,16 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'com.xent:dto:1.0.0-SNAPSHOT'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'com.h2database:h2:2.2.220'
+	testImplementation 'com.xent:dto:1.0.0-SNAPSHOT'
+	integrationTestImplementation 'com.h2database:h2:2.2.220'
 }
 
 dependencyManagement {
@@ -56,3 +85,22 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+
+tasks.register('integrationTest', Test) {
+	description = 'Runs the integration tests.'
+	group = 'verification'
+	testClassesDirs = sourceSets.integrationTest.output.classesDirs
+	classpath = sourceSets.integrationTest.runtimeClasspath
+}
+
+
+tasks.named('integrationTest') {
+	useJUnitPlatform()
+}
+
+tasks.named('processIntegrationTestResources') {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+

@@ -1,10 +1,9 @@
 package com.example.usermanagementservice.controller;
 
-import com.example.usermanagementservice.DTO.SettingsDto;
-import com.example.usermanagementservice.DTO.FullUserDto;
-import com.example.usermanagementservice.service.ContactService;
 import com.example.usermanagementservice.service.SettingsService;
 import com.example.usermanagementservice.service.UserService;
+import com.xent.DTO.UserManagementService.FullUserDetailsDto;
+import com.xent.DTO.UserManagementService.SettingsDto;
 import lombok.AllArgsConstructor;
 
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +18,11 @@ public class UserController {
     private final SettingsService settingsService;
 
     @GetMapping("")
-    public Collection<FullUserDto> getUsers() {
+    public Collection<FullUserDetailsDto> getUsers() {
         return userService.getAllUsers();
     }
     @GetMapping("/{nickname}")
-    public FullUserDto getUserByNickname(@PathVariable String nickname) {
+    public FullUserDetailsDto getUserByNickname(@PathVariable String nickname) {
         return userService.getUserByNickname(nickname);
     }
     @GetMapping("/{nickname}/settings")
@@ -31,11 +30,11 @@ public class UserController {
         return settingsService.getSettingsByUsername(nickname);
     }
     @PostMapping("")
-    public FullUserDto createUser(@RequestBody FullUserDto user) {
+    public FullUserDetailsDto createUser(@RequestBody FullUserDetailsDto user) {
         return userService.createUser(user);
     }
     @PutMapping("")
-    public FullUserDto editUser(FullUserDto user) {
+    public FullUserDetailsDto editUser(FullUserDetailsDto user) {
         return userService.editUserByNickName(user);
     }
     @PutMapping("/{nickname}/settings")

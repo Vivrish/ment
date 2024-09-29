@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usermanagementservice
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: usermanagementservice
+  template:
+    metadata:
+      labels:
+        app: usermanagementservice
+    spec:
+      imagePullSecrets:
+        - name: ghcr-secret
+      containers:
+        - name: usermanagementservice
+          image: ghcr.io/vivrish/usermanagementservice:latest
+          ports:
+            - containerPort: 8060
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "cloud"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

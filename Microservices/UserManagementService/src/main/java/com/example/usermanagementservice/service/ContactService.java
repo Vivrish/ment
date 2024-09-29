@@ -1,6 +1,6 @@
 package com.example.usermanagementservice.service;
 
-import com.example.usermanagementservice.DTO.ContactDto;
+import com.example.usermanagementservice.DTO.Converter;
 import com.example.usermanagementservice.domain.Contact;
 import com.example.usermanagementservice.domain.User;
 import com.example.usermanagementservice.exception.UserAlreadyInContactsException;
@@ -8,6 +8,7 @@ import com.example.usermanagementservice.exception.UserDoesNotExistException;
 import com.example.usermanagementservice.exception.UserIsNotInContactsException;
 import com.example.usermanagementservice.repository.ContactRepository;
 import com.example.usermanagementservice.repository.UserRepository;
+import com.xent.DTO.UserManagementService.ContactDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.Collection;
 public class ContactService {
     private final ContactRepository contactRepository;
     private final UserRepository userRepository;
+    private final Converter converter;
 
     public Collection<ContactDto> getContactsByNickname(String nickname) throws UserDoesNotExistException{
         User user = userRepository.getByNickname(nickname);
@@ -30,7 +32,7 @@ public class ContactService {
         }
         Collection<ContactDto> contacts = new ArrayList<>();
         for (Contact contact: user.getContacts()) {
-            contacts.add(new ContactDto(contact));
+            contacts.add(converter.contactDto(contact));
         }
         return contacts;
     }
@@ -54,7 +56,7 @@ public class ContactService {
         contactRepository.save(contact);
         Contact inverseContact = new Contact(userOther, userOne);
         contactRepository.save(inverseContact);
-        return new ContactDto(contact);
+        return converter.contactDto(contact);
     }
 
     public void deleteContactByNicknames(String nicknameOne, String nicknameOther) throws  UserDoesNotExistException, UserIsNotInContactsException{

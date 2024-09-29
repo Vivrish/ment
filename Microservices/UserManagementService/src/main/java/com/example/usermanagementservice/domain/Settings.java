@@ -1,7 +1,7 @@
 package com.example.usermanagementservice.domain;
 
 
-import com.example.usermanagementservice.DTO.SettingsDto;
+import com.xent.DTO.UserManagementService.SettingsDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

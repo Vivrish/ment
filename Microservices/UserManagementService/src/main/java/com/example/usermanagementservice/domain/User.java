@@ -1,6 +1,6 @@
 package com.example.usermanagementservice.domain;
 
-import com.example.usermanagementservice.DTO.FullUserDto;
+import com.xent.DTO.UserManagementService.FullUserDetailsDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +24,8 @@ public class User {
         this.settings = settings;
     }
 
-    public User(FullUserDto userDto) {
-        this.nickname = userDto.getNickname();
+    public User(FullUserDetailsDto userDto) {
+        this.nickname = userDto.getUsername();
         this.firstName = userDto.getFirstName();
         this.lastName = userDto.getLastName();
         this.description = userDto.getDescription();
@@ -36,7 +36,7 @@ public class User {
     private Long id;
     @Column(nullable = false, unique = true)
     private String nickname;
-    @Column
+    @Column(nullable = false)
     private String firstName;
     @Column
     private String lastName;
@@ -48,8 +48,8 @@ public class User {
     private Settings settings;
 
 
-    public void updateAttributes(FullUserDto fullUserDto) {
-        this.nickname = fullUserDto.getNickname();
+    public void updateAttributes(FullUserDetailsDto fullUserDto) {
+        this.nickname = fullUserDto.getUsername();
         this.firstName = fullUserDto.getFirstName();
         this.lastName = fullUserDto.getLastName();
         this.description = fullUserDto.getDescription();

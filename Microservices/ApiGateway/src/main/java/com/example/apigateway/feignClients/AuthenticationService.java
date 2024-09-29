@@ -1,8 +1,6 @@
 package com.example.apigateway.feignClients;
 
-import com.example.apigateway.DTO.FullChatUserDto;
-import com.example.apigateway.DTO.FullUserCredentialsDto;
-import com.example.apigateway.config.FeignConfig;
+import com.xent.DTO.AuthenticationService.UserCredentialsDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Component
 public interface AuthenticationService {
     @PostMapping("/api/v1/register")
-    void register(@RequestBody FullUserCredentialsDto user);
+    void register(@RequestBody UserCredentialsDto user);
     @PostMapping("/api/v1/login")
-    String login(@RequestBody FullUserCredentialsDto user);
-    @GetMapping("/api/v1/auth")
-    boolean authenticate(String token);
+    String login(@RequestBody UserCredentialsDto user);
+    @GetMapping("/api/v1/auth/{token}")
+    boolean authenticate(@PathVariable String token);
     @GetMapping("api/v1/users/{username}")
-    FullUserCredentialsDto getUserByName(@PathVariable String username);
+    UserCredentialsDto getUserByName(@PathVariable String username);
 
 }

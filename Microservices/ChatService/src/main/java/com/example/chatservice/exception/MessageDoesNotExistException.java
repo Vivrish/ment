@@ -6,6 +6,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class MessageDoesNotExistException extends ResponseStatusException {
     public MessageDoesNotExistException() {
-        super(HttpStatus.BAD_REQUEST, "Message do not exist");
+        super(HttpStatus.NOT_FOUND, "Message does not exist");
     }
 }

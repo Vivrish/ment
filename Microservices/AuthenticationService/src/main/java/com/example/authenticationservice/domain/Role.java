@@ -1,10 +1,13 @@
 package com.example.authenticationservice.domain;
 
-import com.example.authenticationservice.DTO.RoleDto;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "role")
+@NoArgsConstructor
+@Data
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,28 +19,4 @@ public class Role {
         this.name = name;
     }
 
-    public Role() {
-
-    }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public RoleDto toRoleDto() {
-        return new RoleDto(name);
-    }
 }
