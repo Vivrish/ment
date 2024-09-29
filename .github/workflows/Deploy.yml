@@ -177,16 +177,14 @@ jobs:
           - ChatsDB
           - ChatService
           - EurekaServer
-          - Kafka
           - UserCredentialsDB
           - UserDetailsDB
           - UserManagementService
-          - Zookeeper
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: install the gcloud cli
+      - name: Install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT }}
