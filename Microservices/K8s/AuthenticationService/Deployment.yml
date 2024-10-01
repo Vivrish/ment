@@ -12,6 +12,7 @@ spec:
       labels:
         app: authservice
     spec:
+      serviceAccount.name: resource-access
       imagePullSecrets:
         - name: ghcr-secret
       containers:

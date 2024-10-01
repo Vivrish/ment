@@ -12,6 +12,7 @@ spec:
       labels:
         app: chatservice
     spec:
+      serviceAccount.name: resource-access
       imagePullSecrets:
         - name: ghcr-secret
       containers:
