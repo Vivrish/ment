@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "AuthenticationService")
+@FeignClient(name = "authservice")
 @Component
 public interface AuthenticationService {
     @PostMapping("/api/v1/register")

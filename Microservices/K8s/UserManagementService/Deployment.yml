@@ -12,7 +12,7 @@ spec:
       labels:
         app: usermanagementservice
     spec:
-      serviceAccount.name: resource-access
+      serviceAccountName: resource-access
       imagePullSecrets:
         - name: ghcr-secret
       containers:
