@@ -174,11 +174,7 @@ jobs:
           - ApiGateway
           - AuthenticationService
           - UserManagementService
-          - ChatsDB
           - ChatService
-          - EurekaServer
-          - UserCredentialsDB
-          - UserDetailsDB
           - UserManagementService
     steps:
       - name: Checkout Code
