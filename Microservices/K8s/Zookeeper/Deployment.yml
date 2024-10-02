@@ -1,3 +1,4 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,10 +16,15 @@ spec:
     spec:
       containers:
         - name: zookeeper
-          image: wurstmeister/zookeeper:latest
+          image: confluentinc/cp-zookeeper:7.0.1
           ports:
             - containerPort: 2181
+          env:
+            - name: ZOOKEEPER_CLIENT_PORT
+              value: "2181"
+            - name: ZOOKEEPER_TICK_TIME
+              value: "2000"
           resources:
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1024Mi"
+              cpu: "300m"

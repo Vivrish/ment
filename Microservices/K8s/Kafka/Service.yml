@@ -1,15 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: kafka
+  name: kafka-server
   namespace: kafka
 spec:
   ports:
-    - port: 9093
-      name: inside
-      targetPort: 9093
     - port: 9092
-      name: outside
-      targetPort: 9092
   selector:
-    app: kafka
+    app: kafka-server
