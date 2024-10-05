@@ -172,8 +172,6 @@ jobs:
           - AuthenticationService
           - UserManagementService
           - ChatService
-          - Kafka
-          - Zookeeper
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

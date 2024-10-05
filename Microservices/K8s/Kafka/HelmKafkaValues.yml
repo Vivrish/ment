@@ -1,0 +1,53 @@
+# Enable KRaft mode and disable Zookeeper
+kafka:
+  listeners:
+    - PLAINTEXT://:9092
+  advertisedListeners:
+    - PLAINTEXT://kafka:9092
+  zookeeper:
+    enabled: false # Disable Zookeeper
+  controller:
+    replicaCount: 1 # Enable controller replicas for KRaft mode
+
+listeners:
+  ## @param listeners.client.name Name for the Kafka client listener
+  ## @param listeners.client.containerPort Port for the Kafka client listener
+  ## @param listeners.client.protocol Security protocol for the Kafka client listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
+  ## @param listeners.client.sslClientAuth Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'
+  client:
+    containerPort: 9092
+    protocol: PLAINTEXT
+    name: CLIENT
+    sslClientAuth: "none"
+  controller:
+    name: CONTROLLER
+    containerPort: 9093
+    protocol: PLAINTEXT
+    sslClientAuth: "none"
+  ## @param listeners.interbroker.name Name for the Kafka inter-broker listener
+  ## @param listeners.interbroker.containerPort Port for the Kafka inter-broker listener
+  ## @param listeners.interbroker.protocol Security protocol for the Kafka inter-broker listener. Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
+  ## @param listeners.interbroker.sslClientAuth Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.authType for this listener. Allowed values are 'none', 'requested' and 'required'
+  interbroker:
+    containerPort: 9094
+    protocol: PLAINTEXT
+    name: INTERNAL
+    sslClientAuth: "none"
+  ## @param listeners.external.containerPort Port for the Kafka external listener
+  ## @param listeners.external.protocol Security protocol for the Kafka external listener. . Allowed values are 'PLAINTEXT', 'SASL_PLAINTEXT', 'SASL_SSL' and 'SSL'
+  ## @param listeners.external.name Name for the Kafka external listener
+  ## @param listeners.external.sslClientAuth Optional. If SASL_SSL is enabled, configure mTLS TLS authentication type. If SSL protocol is enabled, overrides tls.sslClientAuth for this listener. Allowed values are 'none', 'requested' and 'required'
+  external:
+    containerPort: 9095
+    protocol: PLAINTEXT
+    name: EXTERNAL
+    sslClientAuth: "none"
+sslClientAuth: "none"
+
+# Number of Kafka broker replicas
+replicaCount: 1 # Set your desired number of Kafka brokers
+
+# Kafka listener settings
+
+externalAccess:
+  enabled: false
