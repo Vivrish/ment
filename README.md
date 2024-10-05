@@ -12,6 +12,7 @@
 7. [Testing](#Testing)
 8. [Pipeline](#Pipeline)
 9. [Deployment](#Deployment)
+10. [Licence](#Licence)
 
  
 ## Overview
@@ -104,4 +105,4 @@ Kafka: Deployed using Helm charts for cluster-wide asynchronous communication.
 
 # License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
