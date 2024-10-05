@@ -1,4 +1,4 @@
-name: CI/CD pipeline
+name: Deploy pipeline
 
 on:
   push:
@@ -84,7 +84,6 @@ jobs:
           - AuthenticationService
           - UserManagementService
           - ChatService
-          - EurekaServer
 
     steps:
       - name: Checkout code
@@ -126,7 +125,6 @@ jobs:
           AuthenticationService: authservice
           UserManagementService: usermanagementservice
           ChatService: chatservice
-          EurekaServer: eureka
         run: |
           cd Microservices/${{ matrix.service }}  
           docker build -t $${{ matrix.service }} .
@@ -138,7 +136,6 @@ jobs:
           AuthenticationService: authservice
           UserManagementService: usermanagementservice
           ChatService: chatservice
-          EurekaServer: eureka
         run: |
           docker tag $${{ matrix.service }} $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
           docker push $DOCKER_REGISTRY/vivrish/$${{ matrix.service }}:latest
@@ -166,7 +163,7 @@ jobs:
           ./gradlew integrationTest --no-daemon
 
   deploy:
-    needs: [unit-tests, integration-tests]
+    needs: [unit-tests, integration-tests, build]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -174,19 +171,12 @@ jobs:
           - ApiGateway
           - AuthenticationService
           - UserManagementService
-          - ChatsDB
           - ChatService
-          - EurekaServer
-          - Kafka
-          - UserCredentialsDB
-          - UserDetailsDB
-          - UserManagementService
-          - Zookeeper
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: install the gcloud cli
+      - name: Install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.GCP_PROJECT }}
