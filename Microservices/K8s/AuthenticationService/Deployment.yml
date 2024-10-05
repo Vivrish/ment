@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: authservice
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: authservice
@@ -12,6 +12,7 @@ spec:
       labels:
         app: authservice
     spec:
+      serviceAccountName: resource-access
       imagePullSecrets:
         - name: ghcr-secret
       containers:
@@ -22,6 +23,20 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: "cloud"
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: authservice-db-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: authservice-db-credentials
+                  key: password
+          volumeMounts:
+            - name: cloud-sql-instance-credentials
+              mountPath: /secrets
+              readOnly: true
           resources:
             requests:
               memory: "256Mi"
@@ -29,3 +44,30 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+          env:
+            - name: INSTANCE_CONNECTION_NAME
+              value: "xent-436317:europe-central2:main-postgres"
+          command:
+            [
+              "/cloud_sql_proxy",
+              "-instances=$(INSTANCE_CONNECTION_NAME)=tcp:5432",
+              "-credential_file=/secrets/credentials.json",
+            ]
+          volumeMounts:
+            - name: cloud-sql-instance-credentials
+              mountPath: /secrets
+              readOnly: true
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+      volumes:
+        - name: cloud-sql-instance-credentials
+          secret:
+            secretName: node-service-key
