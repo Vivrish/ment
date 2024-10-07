@@ -32,7 +32,7 @@ The project showcases DevOps practices with Docker, Kubernetes, CI/CD pipelines,
 * Cloud Deployment: Scalable deployment using Google Cloud GKE and Google Cloud SQL
 
 > [!NOTE]
-> See the service diagram for more specific features and patterns
+> See the service diagram (docs or wiki) for more specific features and patterns
 
 ## Technologies
 
@@ -56,7 +56,7 @@ Three-Tier architecture principals. Each service has its own independent PosgreS
 For testing purposes each database has an in-memory copy (H2 Database).
 
 > [!NOTE]
-> See the cloud service architecture diagram and one service diagram for better visualisation
+> See the cloud service architecture diagram and one service diagram (docs or wiki) for better visualisation
 
 ## Microservices
 
@@ -80,7 +80,7 @@ For testing purposes each database has an in-memory copy (H2 Database).
 * Kafka Asynchronous Messaging: For efficiency and scalability, services also use Kafka for asynchronous messaging wherever possible.
   
 > [!NOTE]
-> See the cloud service architecture diagram for better visualisation
+> See the cloud service architecture diagram (docs or wiki) for better visualisation
 
 ## Testing
 
